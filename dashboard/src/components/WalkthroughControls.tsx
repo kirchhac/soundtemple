@@ -40,9 +40,11 @@ export default function WalkthroughControls({
       const dy = e.clientY - lastPointer.current.y;
       lastPointer.current = { x: e.clientX, y: e.clientY };
 
+      // Invert look direction on touch (mobile) vs mouse (desktop)
+      const sign = e.pointerType === 'touch' ? -1 : 1;
       _euler.setFromQuaternion(camera.quaternion, 'YXZ');
-      _euler.y += dx * 0.003;
-      _euler.x += dy * 0.003;
+      _euler.y += sign * dx * 0.003;
+      _euler.x += sign * dy * 0.003;
       _euler.x = Math.max(-Math.PI * 85 / 180, Math.min(Math.PI * 85 / 180, _euler.x));
       camera.quaternion.setFromEuler(_euler);
     };

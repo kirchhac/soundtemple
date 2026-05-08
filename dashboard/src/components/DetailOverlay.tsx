@@ -1,10 +1,21 @@
-import React from 'react';
+import React, { useState, useLayoutEffect } from 'react';
 import Plot from 'react-plotly.js';
 import type { FileDetail } from '../types';
 import { useAudioPlayback } from './useAudioPlayback';
 import AudioPlayer from './AudioPlayer';
 import PitchDisplay from './PitchDisplay';
 import { interpolateFreq } from './pitchUtils';
+
+function useIsMobile(breakpoint = 768) {
+  const [mobile, setMobile] = useState(() => window.innerWidth <= breakpoint);
+  useLayoutEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${breakpoint}px)`);
+    const handler = (e: MediaQueryListEvent) => setMobile(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, [breakpoint]);
+  return mobile;
+}
 
 export const REFERENCE_LINES = [
   { freq: 93, label: 'Gb2 (93 Hz)', color: '#00d4ff' },
@@ -22,6 +33,7 @@ export default function DetailOverlayContent({
   onClose: () => void;
 }) {
   const { currentFileId, isPlaying, currentTime, duration } = useAudioPlayback();
+  const isMobile = useIsMobile();
 
   const isActive = currentFileId === file.id;
 
@@ -77,17 +89,20 @@ export default function DetailOverlayContent({
               marker: {
                 color: file.time_series.peak_magnitudes,
                 colorscale: 'Hot',
-                size: 5,
-                colorbar: {
-                  title: 'Magnitude',
-                  titlefont: { color: '#8888a0' },
-                  tickfont: { color: '#8888a0' },
-                  x: 1.08,
-                },
+                size: isMobile ? 4 : 5,
+                ...(isMobile ? {} : {
+                  colorbar: {
+                    title: 'Magnitude',
+                    titlefont: { color: '#8888a0' },
+                    tickfont: { color: '#8888a0' },
+                    x: 1.08,
+                  },
+                }),
               },
               name: 'Dominant Freq',
               yaxis: 'y',
               hovertemplate: 't=%{x:.1f}s<br>%{y:.1f} Hz<br>mag=%{marker.color:.0f}<extra></extra>',
+              showlegend: !isMobile,
             },
             {
               x: file.time_series.times,
@@ -100,39 +115,38 @@ export default function DetailOverlayContent({
               name: 'Intensity (RMS)',
               yaxis: 'y2',
               hovertemplate: 't=%{x:.1f}s<br>%{y:.1f} dB<extra></extra>',
+              showlegend: !isMobile,
             },
           ]}
           layout={{
-            title: { text: 'Frequency & Intensity Over Time', font: { color: '#e8e8f0', size: 13 } },
+            title: { text: 'Frequency & Intensity Over Time', font: { color: '#e8e8f0', size: isMobile ? 11 : 13 } },
             paper_bgcolor: 'transparent',
             plot_bgcolor: 'rgba(26,26,46,0.5)',
-            font: { color: '#8888a0' },
-            xaxis: { title: 'Time (s)', gridcolor: 'rgba(42,42,62,0.5)' },
+            font: { color: '#8888a0', size: isMobile ? 9 : 12 },
+            xaxis: { title: isMobile ? undefined : 'Time (s)', gridcolor: 'rgba(42,42,62,0.5)' },
             yaxis: {
-              title: 'Frequency (Hz)',
+              title: isMobile ? 'Hz' : 'Frequency (Hz)',
               titlefont: { color: '#00d4ff' },
-              tickfont: { color: '#00d4ff' },
+              tickfont: { color: '#00d4ff', size: isMobile ? 9 : 12 },
               gridcolor: 'rgba(42,42,62,0.5)',
               range: [30, 500],
               side: 'left',
             },
             yaxis2: {
-              title: 'Intensity (dB)',
+              title: isMobile ? 'dB' : 'Intensity (dB)',
               titlefont: { color: '#4682b4' },
-              tickfont: { color: '#4682b4' },
+              tickfont: { color: '#4682b4', size: isMobile ? 9 : 12 },
               overlaying: 'y',
               side: 'right',
               showgrid: false,
             },
             shapes: [
-              // Reference note lines
               ...REFERENCE_LINES.map(r => ({
                 type: 'line' as const,
                 x0: 0, x1: 1, xref: 'paper' as const,
                 y0: r.freq, y1: r.freq,
                 line: { color: r.color, width: 1, dash: 'dot' as const },
               })),
-              // Playback tracking line — uses data coordinates so it aligns perfectly
               ...(isActive && mappedTime > tMin
                 ? [{
                     type: 'line' as const,
@@ -146,10 +160,10 @@ export default function DetailOverlayContent({
               x: 0, y: 1.12, orientation: 'h' as const,
               font: { size: 10 }, bgcolor: 'transparent',
             },
-            margin: { t: 50, r: 100, b: 50, l: 60 },
-            height: 420,
+            margin: isMobile ? { t: 36, r: 40, b: 32, l: 40 } : { t: 50, r: 100, b: 50, l: 60 },
+            height: isMobile ? 280 : 420,
           }}
-          config={{ responsive: true }}
+          config={{ responsive: true, displayModeBar: !isMobile }}
           style={{ width: '100%' }}
         />
 
@@ -169,10 +183,10 @@ export default function DetailOverlayContent({
             },
           ]}
           layout={{
-            title: { text: 'Time-Averaged Spectrum (30-500 Hz)', font: { color: '#e8e8f0', size: 13 } },
+            title: { text: 'Time-Averaged Spectrum (30-500 Hz)', font: { color: '#e8e8f0', size: isMobile ? 11 : 13 } },
             paper_bgcolor: 'transparent',
             plot_bgcolor: 'rgba(26,26,46,0.5)',
-            font: { color: '#8888a0' },
+            font: { color: '#8888a0', size: isMobile ? 9 : 12 },
             xaxis: { title: 'Frequency (Hz)', gridcolor: 'rgba(42,42,62,0.5)' },
             yaxis: { title: 'Magnitude', gridcolor: 'rgba(42,42,62,0.5)' },
             shapes: REFERENCE_LINES.map(r => ({
@@ -181,39 +195,37 @@ export default function DetailOverlayContent({
               y0: 0, y1: 1, yref: 'paper' as const,
               line: { color: r.color, width: 1, dash: 'dot' as const },
             })),
-            margin: { t: 40, r: 40, b: 50, l: 60 },
-            height: 300,
+            margin: isMobile ? { t: 32, r: 12, b: 40, l: 36 } : { t: 40, r: 40, b: 50, l: 60 },
+            height: isMobile ? 220 : 300,
           }}
-          config={{ responsive: true }}
+          config={{ responsive: true, displayModeBar: !isMobile }}
           style={{ width: '100%' }}
         />
 
         {/* Spectral peaks table */}
         <h3 style={{ marginTop: 24, marginBottom: 8 }}>Spectral Peaks (Overtone Structure)</h3>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.8rem' }}>
-          <thead>
-            <tr style={{ borderBottom: '1px solid #2a2a3e' }}>
-              <th style={{ padding: '8px', textAlign: 'left', color: '#8888a0' }}>Rank</th>
-              <th style={{ padding: '8px', textAlign: 'left', color: '#8888a0' }}>Frequency</th>
-              <th style={{ padding: '8px', textAlign: 'left', color: '#8888a0' }}>Note</th>
-              <th style={{ padding: '8px', textAlign: 'left', color: '#8888a0' }}>Magnitude</th>
-              <th style={{ padding: '8px', textAlign: 'left', color: '#8888a0' }}>Ratio</th>
-            </tr>
-          </thead>
-          <tbody>
-            {file.spectral_peaks.map((peak, i) => (
-              <tr key={i} style={{ borderBottom: '1px solid #1a1a2e' }}>
-                <td style={{ padding: '8px' }}>{i + 1}</td>
-                <td style={{ padding: '8px', color: '#00d4ff', fontWeight: 600 }}>{peak.freq_hz} Hz</td>
-                <td style={{ padding: '8px' }}>{peak.note} ({peak.cents > 0 ? '+' : ''}{peak.cents}c)</td>
-                <td style={{ padding: '8px' }}>{peak.magnitude.toFixed(0)}</td>
-                <td style={{ padding: '8px', color: '#a855f7' }}>
-                  {peak.ratio_to_fundamental ? `${peak.ratio_to_fundamental}x` : '1x (fundamental)'}
-                </td>
+        <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: isMobile ? '0.72rem' : '0.8rem', minWidth: isMobile ? 400 : undefined }}>
+            <thead>
+              <tr style={{ borderBottom: '1px solid #2a2a3e' }}>
+                <th style={{ padding: isMobile ? '6px' : '8px', textAlign: 'left', color: '#8888a0' }}>Rank</th>
+                <th style={{ padding: isMobile ? '6px' : '8px', textAlign: 'left', color: '#8888a0' }}>Frequency</th>
+                <th style={{ padding: isMobile ? '6px' : '8px', textAlign: 'left', color: '#8888a0' }}>Note</th>
+                <th style={{ padding: isMobile ? '6px' : '8px', textAlign: 'left', color: '#8888a0' }}>Magnitude</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {file.spectral_peaks.map((peak, i) => (
+                <tr key={i} style={{ borderBottom: '1px solid #1a1a2e' }}>
+                  <td style={{ padding: isMobile ? '6px' : '8px' }}>{i + 1}</td>
+                  <td style={{ padding: isMobile ? '6px' : '8px', color: '#00d4ff', fontWeight: 600 }}>{peak.freq_hz} Hz</td>
+                  <td style={{ padding: isMobile ? '6px' : '8px' }}>{peak.note} ({peak.cents > 0 ? '+' : ''}{peak.cents}c)</td>
+                  <td style={{ padding: isMobile ? '6px' : '8px' }}>{peak.magnitude.toFixed(0)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

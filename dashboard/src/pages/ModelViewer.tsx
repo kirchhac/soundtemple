@@ -183,6 +183,7 @@ export default function ModelViewer() {
   const [viewMode, setViewMode] = useState<'orbit' | 'walkthrough'>('orbit');
   const [manifest, setManifest] = useState<Manifest | null>(null);
   const [selectedFile, setSelectedFile] = useState<FileDetail | null>(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const joystickRef = useRef({ x: 0, y: 0 });
   const savedCameraState = useRef<{ position: THREE.Vector3; quaternion: THREE.Quaternion } | null>(null);
 
@@ -199,11 +200,12 @@ export default function ModelViewer() {
       .catch(err => console.error('Failed to load manifest:', err));
   }, []);
 
-  // Reset to orbit mode on model switch
+  // Reset to orbit mode on model switch, close sidebar on mobile
   const handleModelSwitch = useCallback((model: ModelInfo) => {
     setActiveModel(model);
     setViewMode('orbit');
     savedCameraState.current = null;
+    setSidebarOpen(false);
   }, []);
 
   // Filter recordings by active model's sites
@@ -225,66 +227,75 @@ export default function ModelViewer() {
     <div>
       {/* Full-screen 3D viewer with sidebar overlay */}
       <div className="model-viewer-page">
-        <div className="model-sidebar">
-          <h3>LiDAR Scans</h3>
-          {MODELS.map(model => (
-            <div
-              key={model.id}
-              className={`model-list-item ${activeModel.id === model.id ? 'active' : ''}`}
-              onClick={() => handleModelSwitch(model)}
-            >
-              <h4>{model.name}</h4>
-              <p>{model.description}</p>
-              <p style={{ marginTop: 4, color: '#00d4ff' }}>
-                Resonance: {model.resonance}
-              </p>
-            </div>
-          ))}
+        <div className={`model-sidebar ${sidebarOpen ? 'open' : ''}`}>
+          {/* Mobile: compact header that toggles the panel */}
+          <div className="sidebar-mobile-header" onClick={() => setSidebarOpen(o => !o)}>
+            <span className="sidebar-mobile-title">{activeModel.name}</span>
+            <span className={`sidebar-chevron ${sidebarOpen ? 'expanded' : ''}`}>&#9662;</span>
+          </div>
 
-          <div style={{ marginTop: 24, padding: '16px 0', borderTop: '1px solid #2a2a3e' }}>
-            <h4 style={{ fontSize: '0.8rem', margin: '0 0 8px 0', color: '#8888a0' }}>View Mode</h4>
-            <div className="view-mode-toggle">
-              <button
-                className={`view-mode-btn ${!isWalkthrough ? 'active' : ''}`}
-                onClick={() => setViewMode('orbit')}
+          {/* Full sidebar content — always visible on desktop, toggled on mobile */}
+          <div className="sidebar-body">
+            <h3>LiDAR Scans</h3>
+            {MODELS.map(model => (
+              <div
+                key={model.id}
+                className={`model-list-item ${activeModel.id === model.id ? 'active' : ''}`}
+                onClick={() => handleModelSwitch(model)}
               >
-                Orbit View
-              </button>
-              <button
-                className={`view-mode-btn ${isWalkthrough ? 'active' : ''}`}
-                onClick={() => setViewMode('walkthrough')}
-              >
-                Walkthrough
-              </button>
-            </div>
+                <h4>{model.name}</h4>
+                <p>{model.description}</p>
+                <p style={{ marginTop: 4, color: '#00d4ff' }}>
+                  Resonance: {model.resonance}
+                </p>
+              </div>
+            ))}
 
-            {!isWalkthrough && (
-              <button
-                className="rotate-toggle-btn"
-                style={{ marginTop: 8 }}
-                onClick={() => setAutoRotate(r => !r)}
-              >
-                {autoRotate ? 'Pause Rotation' : 'Resume Rotation'}
-              </button>
-            )}
+            <div style={{ marginTop: 24, padding: '16px 0', borderTop: '1px solid #2a2a3e' }}>
+              <h4 style={{ fontSize: '0.8rem', margin: '0 0 8px 0', color: '#8888a0' }}>View Mode</h4>
+              <div className="view-mode-toggle">
+                <button
+                  className={`view-mode-btn ${!isWalkthrough ? 'active' : ''}`}
+                  onClick={() => setViewMode('orbit')}
+                >
+                  Orbit View
+                </button>
+                <button
+                  className={`view-mode-btn ${isWalkthrough ? 'active' : ''}`}
+                  onClick={() => setViewMode('walkthrough')}
+                >
+                  Walkthrough
+                </button>
+              </div>
 
-            <ul style={{ fontSize: '0.7rem', color: '#8888a0', margin: '12px 0 0 0', paddingLeft: 16, lineHeight: 1.8 }}>
-              {isWalkthrough ? (
-                <>
-                  <li>Click + drag: look around</li>
-                  <li>WASD / Arrows: move</li>
-                  <li>Space: move up</li>
-                  <li>Shift: move down</li>
-                </>
-              ) : (
-                <>
-                  <li>Left-click + drag: rotate</li>
-                  <li>Right-click + drag: pan</li>
-                  <li>Scroll: zoom in/out</li>
-                  <li>Double-click: reset view</li>
-                </>
+              {!isWalkthrough && (
+                <button
+                  className="rotate-toggle-btn"
+                  style={{ marginTop: 8 }}
+                  onClick={() => setAutoRotate(r => !r)}
+                >
+                  {autoRotate ? 'Pause Rotation' : 'Resume Rotation'}
+                </button>
               )}
-            </ul>
+
+              <ul style={{ fontSize: '0.7rem', color: '#8888a0', margin: '12px 0 0 0', paddingLeft: 16, lineHeight: 1.8 }}>
+                {isWalkthrough ? (
+                  <>
+                    <li>Click + drag: look around</li>
+                    <li>WASD / Arrows: move</li>
+                    <li>Space: move up</li>
+                    <li>Shift: move down</li>
+                  </>
+                ) : (
+                  <>
+                    <li>Left-click + drag: rotate</li>
+                    <li>Right-click + drag: pan</li>
+                    <li>Scroll: zoom in/out</li>
+                    <li>Double-click: reset view</li>
+                  </>
+                )}
+              </ul>
+            </div>
           </div>
         </div>
 

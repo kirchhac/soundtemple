@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, Suspense, useRef } from 'react';
-import { Canvas, useFrame, useLoader } from '@react-three/fiber';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls, Environment, Grid } from '@react-three/drei';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
@@ -8,6 +8,7 @@ import type { ModelInfo, Manifest, ManifestFile, FileDetail } from '../types';
 import { AudioPlaybackProvider } from '../components/useAudioPlayback';
 import RecordingCard from '../components/RecordingCard';
 import DetailOverlayContent from '../components/DetailOverlay';
+import WalkthroughControls, { MobileJoystick } from '../components/WalkthroughControls';
 
 const MODELS: ModelInfo[] = [
   {
@@ -139,11 +140,56 @@ function FallbackModel() {
   );
 }
 
+// Imperatively set camera position/rotation from outside R3F render loop
+function CameraController({ viewMode, savedCameraState }: {
+  viewMode: 'orbit' | 'walkthrough';
+  savedCameraState: React.MutableRefObject<{ position: THREE.Vector3; quaternion: THREE.Quaternion } | null>;
+}) {
+  const { camera } = useThree();
+  const prevMode = useRef(viewMode);
+
+  useEffect(() => {
+    if (prevMode.current === viewMode) return;
+    prevMode.current = viewMode;
+
+    if (viewMode === 'walkthrough') {
+      // Save current orbit camera state
+      savedCameraState.current = {
+        position: camera.position.clone(),
+        quaternion: camera.quaternion.clone(),
+      };
+      // Move camera inside the model
+      camera.position.set(0, 0, 0);
+      camera.quaternion.setFromEuler(new THREE.Euler(0, 0, 0, 'YXZ'));
+    } else {
+      // Restore saved orbit camera state
+      if (savedCameraState.current) {
+        camera.position.copy(savedCameraState.current.position);
+        camera.quaternion.copy(savedCameraState.current.quaternion);
+        savedCameraState.current = null;
+      } else {
+        camera.position.set(3, 2, 3);
+        camera.lookAt(0, 0, 0);
+      }
+    }
+  }, [viewMode, camera, savedCameraState]);
+
+  return null;
+}
+
 export default function ModelViewer() {
   const [activeModel, setActiveModel] = useState<ModelInfo>(MODELS[0]);
-  const [autoRotate, setAutoRotate] = useState(true);
+  const [autoRotate, setAutoRotate] = useState(false);
+  const [viewMode, setViewMode] = useState<'orbit' | 'walkthrough'>('orbit');
   const [manifest, setManifest] = useState<Manifest | null>(null);
   const [selectedFile, setSelectedFile] = useState<FileDetail | null>(null);
+  const joystickRef = useRef({ x: 0, y: 0 });
+  const savedCameraState = useRef<{ position: THREE.Vector3; quaternion: THREE.Quaternion } | null>(null);
+
+  const isWalkthrough = viewMode === 'walkthrough';
+
+  // Force auto-rotation off in walkthrough mode
+  const effectiveAutoRotate = isWalkthrough ? false : autoRotate;
 
   // Fetch manifest on mount
   useEffect(() => {
@@ -151,6 +197,13 @@ export default function ModelViewer() {
       .then(r => r.json())
       .then((data: Manifest) => setManifest(data))
       .catch(err => console.error('Failed to load manifest:', err));
+  }, []);
+
+  // Reset to orbit mode on model switch
+  const handleModelSwitch = useCallback((model: ModelInfo) => {
+    setActiveModel(model);
+    setViewMode('orbit');
+    savedCameraState.current = null;
   }, []);
 
   // Filter recordings by active model's sites
@@ -178,7 +231,7 @@ export default function ModelViewer() {
             <div
               key={model.id}
               className={`model-list-item ${activeModel.id === model.id ? 'active' : ''}`}
-              onClick={() => setActiveModel(model)}
+              onClick={() => handleModelSwitch(model)}
             >
               <h4>{model.name}</h4>
               <p>{model.description}</p>
@@ -189,18 +242,48 @@ export default function ModelViewer() {
           ))}
 
           <div style={{ marginTop: 24, padding: '16px 0', borderTop: '1px solid #2a2a3e' }}>
-            <h4 style={{ fontSize: '0.8rem', margin: '0 0 8px 0', color: '#8888a0' }}>Controls</h4>
-            <button
-              className="rotate-toggle-btn"
-              onClick={() => setAutoRotate(r => !r)}
-            >
-              {autoRotate ? 'Pause Rotation' : 'Resume Rotation'}
-            </button>
+            <h4 style={{ fontSize: '0.8rem', margin: '0 0 8px 0', color: '#8888a0' }}>View Mode</h4>
+            <div className="view-mode-toggle">
+              <button
+                className={`view-mode-btn ${!isWalkthrough ? 'active' : ''}`}
+                onClick={() => setViewMode('orbit')}
+              >
+                Orbit View
+              </button>
+              <button
+                className={`view-mode-btn ${isWalkthrough ? 'active' : ''}`}
+                onClick={() => setViewMode('walkthrough')}
+              >
+                Walkthrough
+              </button>
+            </div>
+
+            {!isWalkthrough && (
+              <button
+                className="rotate-toggle-btn"
+                style={{ marginTop: 8 }}
+                onClick={() => setAutoRotate(r => !r)}
+              >
+                {autoRotate ? 'Pause Rotation' : 'Resume Rotation'}
+              </button>
+            )}
+
             <ul style={{ fontSize: '0.7rem', color: '#8888a0', margin: '12px 0 0 0', paddingLeft: 16, lineHeight: 1.8 }}>
-              <li>Left-click + drag: rotate</li>
-              <li>Right-click + drag: pan</li>
-              <li>Scroll: zoom in/out</li>
-              <li>Double-click: reset view</li>
+              {isWalkthrough ? (
+                <>
+                  <li>Click + drag: look around</li>
+                  <li>WASD / Arrows: move</li>
+                  <li>Space: move up</li>
+                  <li>Shift: move down</li>
+                </>
+              ) : (
+                <>
+                  <li>Left-click + drag: rotate</li>
+                  <li>Right-click + drag: pan</li>
+                  <li>Scroll: zoom in/out</li>
+                  <li>Double-click: reset view</li>
+                </>
+              )}
             </ul>
           </div>
         </div>
@@ -210,35 +293,45 @@ export default function ModelViewer() {
             camera={{ position: [3, 2, 3], fov: 50 }}
             style={{ background: '#0a0a0f' }}
           >
-            <ambientLight intensity={0.4} />
+            <ambientLight intensity={isWalkthrough ? 0.6 : 0.4} />
             <directionalLight position={[5, 5, 5]} intensity={0.8} />
             <directionalLight position={[-5, 3, -5]} intensity={0.3} />
             <pointLight position={[0, 3, 0]} intensity={0.5} color="#00d4ff" />
 
+            <CameraController viewMode={viewMode} savedCameraState={savedCameraState} />
+
             <Suspense fallback={<FallbackModel />}>
-              <ObjModel key={activeModel.id} model={activeModel} autoRotate={autoRotate} />
+              <ObjModel key={activeModel.id} model={activeModel} autoRotate={effectiveAutoRotate} />
             </Suspense>
 
-            <OrbitControls
-              enableDamping
-              dampingFactor={0.05}
-              autoRotate={false}
-              maxDistance={15}
-              minDistance={0.5}
-            />
+            {isWalkthrough ? (
+              <WalkthroughControls enabled joystickRef={joystickRef} />
+            ) : (
+              <OrbitControls
+                enableDamping
+                dampingFactor={0.05}
+                autoRotate={false}
+                maxDistance={15}
+                minDistance={0.5}
+              />
+            )}
 
-            <Grid
-              args={[20, 20]}
-              cellSize={0.5}
-              cellColor="#1a1a2e"
-              sectionSize={2}
-              sectionColor="#2a2a3e"
-              fadeDistance={15}
-              position={[0, -2, 0]}
-            />
+            {!isWalkthrough && (
+              <Grid
+                args={[20, 20]}
+                cellSize={0.5}
+                cellColor="#1a1a2e"
+                sectionSize={2}
+                sectionColor="#2a2a3e"
+                fadeDistance={15}
+                position={[0, -2, 0]}
+              />
+            )}
 
             <Environment preset="night" />
           </Canvas>
+
+          {isWalkthrough && <MobileJoystick joystickRef={joystickRef} />}
 
           <div className="viewer-info">
             <dl style={{ margin: 0 }}>

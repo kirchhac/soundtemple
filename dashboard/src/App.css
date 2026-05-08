@@ -442,6 +442,76 @@
   color: var(--accent-cyan);
 }
 
+/* ── View mode toggle ── */
+.view-mode-toggle {
+  display: flex;
+  gap: 4px;
+}
+
+.view-mode-btn {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-card-hover);
+  color: var(--text-secondary);
+  font-size: 0.72rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.view-mode-btn:hover {
+  border-color: var(--accent-cyan);
+  color: var(--text-primary);
+}
+
+.view-mode-btn.active {
+  background: rgba(0, 212, 255, 0.15);
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+  font-weight: 600;
+}
+
+/* ── Mobile walkthrough joystick ── */
+.walkthrough-joystick {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  z-index: 20;
+  display: none;
+  touch-action: none;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .walkthrough-joystick {
+    display: block;
+  }
+}
+
+.joystick-pad {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  touch-action: none;
+}
+
+.joystick-knob {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(0, 212, 255, 0.4);
+  border: 1px solid rgba(0, 212, 255, 0.6);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
 /* ── Loading ── */
 .loading {
   display: flex;

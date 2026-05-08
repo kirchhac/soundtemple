@@ -62,4 +62,5 @@ export interface ModelInfo {
   texturePath?: string;
   dimensions: { width: string; height: string; depth: string };
   resonance?: string;
+  sites: string[];
 }

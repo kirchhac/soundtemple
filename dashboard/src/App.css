@@ -314,17 +314,28 @@
 
 /* ── 3D Viewer ── */
 .model-viewer-page {
-  display: grid;
-  grid-template-columns: 300px 1fr;
-  gap: 24px;
-  min-height: calc(100vh - 120px);
+  position: relative;
+  /* Leave ~80px at the bottom so the audio section peeks into view,
+     giving users a scroll target that doesn't get eaten by the canvas */
+  height: calc(100vh - 160px);
+  overflow: hidden;
+  /* break out of .main padding */
+  margin: -24px -32px 0;
 }
 
 .model-sidebar {
-  background: var(--bg-card);
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  width: 280px;
+  background: rgba(26, 26, 46, 0.92);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 20px;
+  z-index: 20;
+  backdrop-filter: blur(12px);
+  max-height: calc(100% - 32px);
+  overflow-y: auto;
 }
 
 .model-sidebar h3 {
@@ -362,36 +373,73 @@
 }
 
 .viewer-container {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+  width: 100%;
+  height: 100%;
+  background: var(--bg-primary);
   overflow: hidden;
   position: relative;
 }
 
 .viewer-info {
   position: absolute;
-  bottom: 16px;
-  left: 16px;
+  top: 16px;
+  right: 16px;
   background: rgba(10, 10, 15, 0.85);
-  padding: 12px 16px;
+  padding: 10px 14px;
   border-radius: 8px;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   z-index: 10;
   backdrop-filter: blur(8px);
 }
 
 .viewer-info dt {
   color: var(--text-secondary);
-  font-size: 0.65rem;
+  font-size: 0.6rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
 }
 
 .viewer-info dd {
-  margin: 0 0 8px 0;
+  margin: 0 0 6px 0;
   color: var(--accent-cyan);
   font-weight: 600;
+}
+
+.viewer-info dd:last-child {
+  margin-bottom: 0;
+}
+
+/* ── Model Viewer: audio section ── */
+.model-audio-section {
+  padding: 24px 32px;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.model-audio-section h3 {
+  font-size: 1.1rem;
+  margin: 0 0 16px 0;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* ── Rotation toggle button ── */
+.rotate-toggle-btn {
+  width: 100%;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-card-hover);
+  color: var(--text-primary);
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.rotate-toggle-btn:hover {
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
 }
 
 /* ── Loading ── */
@@ -428,5 +476,7 @@
   }
   .main { padding: 16px; }
   .chart-grid { grid-template-columns: 1fr; }
-  .model-viewer-page { grid-template-columns: 1fr; }
+  .model-viewer-page { margin: -16px -16px 0; }
+  .model-sidebar { width: 220px; left: 8px; top: 8px; padding: 12px; }
+  .model-audio-section { padding: 16px; }
 }

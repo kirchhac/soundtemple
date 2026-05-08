@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo, useCallback } from 'react';
+import React, { useEffect, useState, useMemo, useCallback, useLayoutEffect } from 'react';
 import Plot from 'react-plotly.js';
 import type { Manifest, ManifestFile, FileDetail } from '../types';
 import { AudioPlaybackProvider } from '../components/useAudioPlayback';
@@ -21,6 +21,17 @@ const SITE_COLORS: Record<string, string> = {
   'Unknown': '#64748b',
 };
 
+function useIsMobile(breakpoint = 768) {
+  const [mobile, setMobile] = useState(() => window.innerWidth <= breakpoint);
+  useLayoutEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${breakpoint}px)`);
+    const handler = (e: MediaQueryListEvent) => setMobile(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, [breakpoint]);
+  return mobile;
+}
+
 /* ─── Main dashboard ─── */
 
 export default function FrequencyDashboard() {
@@ -28,6 +39,7 @@ export default function FrequencyDashboard() {
   const [selectedSite, setSelectedSite] = useState<string>('all');
   const [selectedFile, setSelectedFile] = useState<FileDetail | null>(null);
   const [loading, setLoading] = useState(true);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     fetch('/data/manifest.json')
@@ -125,13 +137,14 @@ export default function FrequencyDashboard() {
             };
           })}
           layout={{
-            title: { text: 'Dominant Frequency by Site', font: { color: '#e8e8f0', size: 14 } },
+            title: { text: 'Dominant Frequency by Site', font: { color: '#e8e8f0', size: isMobile ? 12 : 14 } },
             paper_bgcolor: 'transparent',
             plot_bgcolor: 'rgba(26,26,46,0.5)',
-            font: { color: '#8888a0', size: 11 },
+            font: { color: '#8888a0', size: isMobile ? 9 : 11 },
             xaxis: {
-              tickangle: -30,
+              tickangle: isMobile ? -45 : -30,
               gridcolor: 'rgba(42,42,62,0.5)',
+              ...(isMobile && { tickfont: { size: 8 } }),
             },
             yaxis: {
               title: 'Frequency (Hz)',
@@ -144,19 +157,19 @@ export default function FrequencyDashboard() {
               y0: r.freq, y1: r.freq,
               line: { color: r.color, width: 1, dash: 'dot' as const },
             })),
-            annotations: REFERENCE_LINES.map(r => ({
+            annotations: isMobile ? [] : REFERENCE_LINES.map(r => ({
               x: 1, xref: 'paper' as const, xanchor: 'left' as const,
               y: r.freq, yanchor: 'middle' as const,
               text: r.label,
               showarrow: false,
               font: { size: 9, color: r.color },
             })),
-            showlegend: true,
+            showlegend: !isMobile,
             legend: { font: { size: 9 }, bgcolor: 'transparent' },
-            margin: { t: 40, r: 120, b: 100, l: 60 },
-            height: 400,
+            margin: isMobile ? { t: 32, r: 16, b: 80, l: 40 } : { t: 40, r: 120, b: 100, l: 60 },
+            height: isMobile ? 300 : 400,
           }}
-          config={{ responsive: true, displayModeBar: true }}
+          config={{ responsive: true, displayModeBar: !isMobile }}
           style={{ width: '100%' }}
         />
       </div>
@@ -172,10 +185,10 @@ export default function FrequencyDashboard() {
             hovertemplate: '%{x:.0f} Hz: %{y} recordings<extra></extra>',
           }]}
           layout={{
-            title: { text: 'Frequency Distribution (all recordings)', font: { color: '#e8e8f0', size: 14 } },
+            title: { text: 'Frequency Distribution (all recordings)', font: { color: '#e8e8f0', size: isMobile ? 12 : 14 } },
             paper_bgcolor: 'transparent',
             plot_bgcolor: 'rgba(26,26,46,0.5)',
-            font: { color: '#8888a0', size: 11 },
+            font: { color: '#8888a0', size: isMobile ? 9 : 11 },
             xaxis: { title: 'Dominant Frequency (Hz)', gridcolor: 'rgba(42,42,62,0.5)' },
             yaxis: { title: 'Count', gridcolor: 'rgba(42,42,62,0.5)' },
             shapes: REFERENCE_LINES.map(r => ({
@@ -184,10 +197,10 @@ export default function FrequencyDashboard() {
               y0: 0, y1: 1, yref: 'paper' as const,
               line: { color: r.color, width: 1.5, dash: 'dot' as const },
             })),
-            margin: { t: 40, r: 40, b: 60, l: 60 },
-            height: 300,
+            margin: isMobile ? { t: 32, r: 12, b: 44, l: 36 } : { t: 40, r: 40, b: 60, l: 60 },
+            height: isMobile ? 240 : 300,
           }}
-          config={{ responsive: true }}
+          config={{ responsive: true, displayModeBar: !isMobile }}
           style={{ width: '100%' }}
         />
       </div>

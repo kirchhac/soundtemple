@@ -36,6 +36,7 @@ export function AudioPlaybackProvider({ children }: { children: React.ReactNode 
   const [duration, setDuration] = useState(0);
   const rafRef = useRef<number>(0);
   const fileIdRef = useRef<string | null>(null);
+  const seekingRef = useRef(false);
 
   const stopLoop = useCallback(() => {
     if (rafRef.current) {
@@ -60,6 +61,7 @@ export function AudioPlaybackProvider({ children }: { children: React.ReactNode 
     if (fileIdRef.current !== fileId) {
       // Different file — swap source
       audio.pause();
+      audio.volume = 1;
       audio.src = url;
       audio.load();
       fileIdRef.current = fileId;
@@ -75,24 +77,69 @@ export function AudioPlaybackProvider({ children }: { children: React.ReactNode 
       };
       audio.addEventListener('loadedmetadata', onLoaded);
     } else {
-      // Same file — resume
+      // Same file — resume with fade-in
+      audio.volume = 0;
       audio.play();
       setIsPlaying(true);
       startLoop();
+      // Quick fade-in to avoid pop
+      let vol = 0;
+      const fadeIn = () => {
+        vol = Math.min(1, vol + 0.1);
+        audio.volume = vol;
+        if (vol < 1) requestAnimationFrame(fadeIn);
+      };
+      requestAnimationFrame(fadeIn);
     }
   }, [startLoop]);
 
   const pause = useCallback(() => {
     const audio = getAudio();
-    audio.pause();
-    setIsPlaying(false);
-    stopLoop();
+    // Fade out quickly to avoid pop/click
+    let vol = audio.volume;
+    const fadeOut = () => {
+      vol -= 0.15;
+      if (vol <= 0) {
+        audio.volume = 0;
+        audio.pause();
+        audio.volume = 1; // Reset for next play
+        setIsPlaying(false);
+        stopLoop();
+      } else {
+        audio.volume = vol;
+        requestAnimationFrame(fadeOut);
+      }
+    };
+    requestAnimationFrame(fadeOut);
   }, [stopLoop]);
 
   const seek = useCallback((time: number) => {
     const audio = getAudio();
+    // Mute during seek to prevent squeal
+    if (!seekingRef.current) {
+      seekingRef.current = true;
+      audio.volume = 0;
+    }
     audio.currentTime = time;
     setCurrentTime(time);
+
+    // Debounced unmute — restore volume after seeking stops
+    const restore = () => {
+      seekingRef.current = false;
+      // Quick fade back in
+      let vol = 0;
+      const fadeIn = () => {
+        vol = Math.min(1, vol + 0.2);
+        if (!seekingRef.current) {
+          audio.volume = vol;
+        }
+        if (vol < 1 && !seekingRef.current) requestAnimationFrame(fadeIn);
+      };
+      requestAnimationFrame(fadeIn);
+    };
+    // Use a short timeout so rapid seek calls don't each trigger a fade-in
+    clearTimeout((seek as any)._timer);
+    (seek as any)._timer = setTimeout(restore, 80);
   }, []);
 
   // Listen for natural end of playback

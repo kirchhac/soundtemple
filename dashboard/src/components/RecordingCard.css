@@ -18,6 +18,63 @@
   margin-top: 4px;
 }
 
+/* ── Resonant frequency badges ── */
+.resonant-freq-display {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 2px 0 4px;
+}
+
+.resonant-freq-badge {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #00ff88;
+  background: rgba(0, 255, 136, 0.08);
+  border: 1px solid rgba(0, 255, 136, 0.25);
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+.resonant-freq-badge.inactive {
+  color: #8888a0;
+  background: rgba(136, 136, 160, 0.08);
+  border-color: rgba(136, 136, 160, 0.25);
+}
+
+/* ── Real-time Hz + note display ── */
+.realtime-pitch {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+.realtime-pitch.large {
+  padding: 6px 0;
+}
+
+.realtime-hz {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #00d4ff;
+  font-variant-numeric: tabular-nums;
+}
+
+.realtime-pitch.large .realtime-hz {
+  font-size: 2rem;
+}
+
+.realtime-note {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #a855f7;
+}
+
+.realtime-pitch.large .realtime-note {
+  font-size: 1.1rem;
+}
+
 /* ── Audio Player ── */
 .audio-player {
   display: flex;

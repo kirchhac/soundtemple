@@ -4,7 +4,7 @@ import MiniFreqGraph from './MiniFreqGraph';
 import AudioPlayer from './AudioPlayer';
 import ResonationMeter, { RESONATION_THRESHOLD } from './ResonationMeter';
 import { useAudioPlayback } from './useAudioPlayback';
-import { interpolateFreq, interpolateRms } from './pitchUtils';
+import { interpolateFreq, interpolateRms, freqToNote } from './pitchUtils';
 import './RecordingCard.css';
 
 interface RecordingCardProps {
@@ -34,6 +34,12 @@ export default function RecordingCard({ file, onShowDetail }: RecordingCardProps
 
   const isResonating = isThisPlaying && currentRms > RESONATION_THRESHOLD;
 
+  // Real-time note info
+  const currentNote = currentFreq > 0 ? freqToNote(currentFreq) : null;
+
+  // Resonant frequencies for this track
+  const resonantFreqs = file.resonant_freqs_hz;
+
   return (
     <div
       className={`chart-card recording-card ${isResonating ? 'resonating' : ''}`}
@@ -51,11 +57,28 @@ export default function RecordingCard({ file, onShowDetail }: RecordingCardProps
         </div>
       </div>
 
-      <div className="freq-display">{file.dominant_freq_hz} Hz</div>
-      <div className="freq-note">
-        {file.dominant_note} ({file.dominant_cents > 0 ? '+' : ''}{file.dominant_cents}c)
-        {file.labeled_note && <span> &mdash; labeled: {file.labeled_note}</span>}
-      </div>
+      {/* Resonant frequency display */}
+      {resonantFreqs && resonantFreqs.length > 0 && (
+        <div className="resonant-freq-display">
+          {resonantFreqs.map((f, i) => (
+            <span key={i} className={`resonant-freq-badge ${file.has_sustained_resonation ? '' : 'inactive'}`}>
+              {f} Hz
+            </span>
+          ))}
+        </div>
+      )}
+
+      {/* Real-time Hz and note — visible during playback */}
+      {isThisPlaying && currentFreq > 0 && (
+        <div className="realtime-pitch">
+          <span className="realtime-hz">{Math.round(currentFreq)} Hz</span>
+          {currentNote && (
+            <span className="realtime-note">
+              {currentNote.fullName}
+            </span>
+          )}
+        </div>
+      )}
 
       {/* Real-time intensity meter — shows resonation state */}
       {isThisPlaying && currentFreq > 0 && (

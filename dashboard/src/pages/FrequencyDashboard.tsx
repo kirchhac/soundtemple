@@ -4,6 +4,7 @@ import type { Manifest, ManifestFile, FileDetail } from '../types';
 import { AudioPlaybackProvider } from '../components/useAudioPlayback';
 import RecordingCard from '../components/RecordingCard';
 import DetailOverlayContent, { REFERENCE_LINES } from '../components/DetailOverlay';
+import { freqToNote } from '../components/pitchUtils';
 
 const SITE_COLORS: Record<string, string> = {
   'Shah-i-Zinda Necropolis': '#a855f7',
@@ -205,6 +206,9 @@ export default function FrequencyDashboard() {
         />
       </div>
 
+      {/* Resonant Frequency Rankings */}
+      <ResonantRankings files={manifest.files} />
+
       {/* Site filter */}
       <div className="filters">
         <button
@@ -244,6 +248,145 @@ export default function FrequencyDashboard() {
           <DetailOverlayContent file={selectedFile} onClose={() => setSelectedFile(null)} />
         )}
       </AudioPlaybackProvider>
+    </div>
+  );
+}
+
+/* ─── Resonant Frequency Rankings ─── */
+
+interface RankingEntry {
+  freqHz: number;
+  note: string;
+  totalSeconds: number;
+  trackCount: number;
+}
+
+function ResonantRankings({ files }: { files: ManifestFile[] }) {
+  const [sortBy, setSortBy] = useState<'time' | 'tracks'>('time');
+
+  const rankings = useMemo(() => {
+    // Collect all resonant frequencies from sustained tracks
+    const freqMap = new Map<number, { seconds: number; tracks: Set<string> }>();
+
+    for (const file of files) {
+      if (!file.has_sustained_resonation || !file.resonant_freqs_hz) continue;
+
+      // Estimate sustained time per frequency: distribute duration proportionally
+      const sustainedDuration = file.duration_s * 0.4; // approximate — avg ~40% of track resonates
+      const perFreq = sustainedDuration / file.resonant_freqs_hz.length;
+
+      for (const freq of file.resonant_freqs_hz) {
+        const existing = freqMap.get(freq) || { seconds: 0, tracks: new Set<string>() };
+        existing.seconds += perFreq;
+        existing.tracks.add(file.id);
+        freqMap.set(freq, existing);
+      }
+    }
+
+    // Merge nearby frequencies (within 5 Hz)
+    const sortedFreqs = Array.from(freqMap.keys()).sort((a, b) => a - b);
+    const used = new Set<number>();
+    const merged: RankingEntry[] = [];
+
+    for (const f of sortedFreqs) {
+      if (used.has(f)) continue;
+      const cluster = [f];
+      for (const f2 of sortedFreqs) {
+        if (f2 !== f && !used.has(f2) && Math.abs(f2 - f) <= 5) {
+          cluster.push(f2);
+        }
+      }
+
+      let totalSec = 0;
+      const allTracks = new Set<string>();
+      let weightedFreq = 0;
+
+      for (const cf of cluster) {
+        const entry = freqMap.get(cf)!;
+        totalSec += entry.seconds;
+        weightedFreq += cf * entry.seconds;
+        entry.tracks.forEach(t => allTracks.add(t));
+        used.add(cf);
+      }
+
+      merged.push({
+        freqHz: Math.round(weightedFreq / totalSec),
+        note: freqToNote(Math.round(weightedFreq / totalSec)).fullName,
+        totalSeconds: Math.round(totalSec),
+        trackCount: allTracks.size,
+      });
+    }
+
+    return merged;
+  }, [files]);
+
+  const sorted = useMemo(() => {
+    if (sortBy === 'time') {
+      return [...rankings].sort((a, b) => b.totalSeconds - a.totalSeconds);
+    }
+    return [...rankings].sort((a, b) => b.trackCount - a.trackCount || b.totalSeconds - a.totalSeconds);
+  }, [rankings, sortBy]);
+
+  const sustainedCount = files.filter(f => f.has_sustained_resonation).length;
+
+  return (
+    <div className="resonant-rankings">
+      <div className="rankings-header">
+        <h3>Resonant Frequencies</h3>
+        <p className="rankings-subtitle">
+          {sustainedCount} of {files.length} recordings sustain resonation (&gt;1s above -16.5 dB)
+        </p>
+      </div>
+
+      <div className="rankings-sort">
+        <button
+          className={`filter-btn ${sortBy === 'time' ? 'active' : ''}`}
+          onClick={() => setSortBy('time')}
+        >
+          By Sustained Time
+        </button>
+        <button
+          className={`filter-btn ${sortBy === 'tracks' ? 'active' : ''}`}
+          onClick={() => setSortBy('tracks')}
+        >
+          By # Tracks
+        </button>
+      </div>
+
+      <div className="rankings-table-wrap">
+        <table className="rankings-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Frequency</th>
+              <th>Note</th>
+              <th>{sortBy === 'time' ? 'Sustained' : '# Tracks'}</th>
+              <th>{sortBy === 'time' ? '# Tracks' : 'Sustained'}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sorted.slice(0, 20).map((entry, i) => (
+              <tr key={entry.freqHz}>
+                <td className="rank-num">{i + 1}</td>
+                <td className="rank-freq">{entry.freqHz} ±3 Hz</td>
+                <td className="rank-note">{entry.note}</td>
+                <td className="rank-value">
+                  {sortBy === 'time'
+                    ? `${entry.totalSeconds}s`
+                    : `${entry.trackCount} tracks`
+                  }
+                </td>
+                <td className="rank-secondary">
+                  {sortBy === 'time'
+                    ? `${entry.trackCount} tracks`
+                    : `${entry.totalSeconds}s`
+                  }
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

@@ -307,6 +307,178 @@
   cursor: pointer;
 }
 
+/* ── Resonation indicators ── */
+.resonation-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: rgba(0, 255, 136, 0.15);
+  border: 1px solid rgba(0, 255, 136, 0.6);
+  color: #00ff88;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 3px 8px;
+  border-radius: 4px;
+  animation: resonation-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes resonation-pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 4px rgba(0, 255, 136, 0.3); }
+  50% { opacity: 0.7; box-shadow: 0 0 12px rgba(0, 255, 136, 0.6); }
+}
+
+.resonation-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0 12px;
+  padding: 8px 12px;
+  background: rgba(0, 255, 136, 0.06);
+  border: 1px solid rgba(0, 255, 136, 0.2);
+  border-radius: 6px;
+  font-size: 0.75rem;
+  color: #a0a0b0;
+}
+
+.resonation-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #00ff88;
+  flex-shrink: 0;
+}
+
+/* ── Resonation Meter ── */
+.resonation-meter {
+  width: 100%;
+}
+
+.resonation-meter.compact {
+  padding: 6px 0;
+}
+
+.resonation-meter.full {
+  padding: 8px 0;
+}
+
+.resonation-meter-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.resonation-meter-title {
+  font-size: 0.7rem;
+  color: #8888a0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.resonation-meter-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.resonation-meter-db {
+  font-size: 0.7rem;
+  color: #a0a0b0;
+  font-variant-numeric: tabular-nums;
+}
+
+.resonation-meter-tag {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #00ff88;
+  background: rgba(0, 255, 136, 0.12);
+  border: 1px solid rgba(0, 255, 136, 0.4);
+  padding: 1px 5px;
+  border-radius: 3px;
+  animation: resonation-pulse 1.2s ease-in-out infinite;
+}
+
+.resonation-meter-track {
+  position: relative;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  overflow: visible;
+}
+
+.resonation-meter.full .resonation-meter-track {
+  height: 12px;
+  border-radius: 6px;
+}
+
+.resonation-meter-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #2a2a4e 0%, #4682b4 60%, #6ba3d6 100%);
+}
+
+.resonation-meter-fill.resonating {
+  background: linear-gradient(90deg, #2a4e2a 0%, #34d399 40%, #00ff88 100%);
+  box-shadow: 0 0 8px rgba(0, 255, 136, 0.4);
+}
+
+.resonation-meter-indicator {
+  position: absolute;
+  top: 50%;
+  width: 3px;
+  height: 14px;
+  transform: translate(-50%, -50%);
+  background: #8888a0;
+  border-radius: 2px;
+}
+
+.resonation-meter.full .resonation-meter-indicator {
+  width: 4px;
+  height: 20px;
+}
+
+.resonation-meter-indicator.resonating {
+  background: #00ff88;
+  box-shadow: 0 0 6px rgba(0, 255, 136, 0.8);
+}
+
+.resonation-meter-threshold {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  width: 2px;
+  background: rgba(0, 255, 136, 0.6);
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+.resonation-meter.full .resonation-meter-threshold {
+  top: -6px;
+  bottom: -6px;
+}
+
+.resonation-meter-threshold-label {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.55rem;
+  color: rgba(0, 255, 136, 0.7);
+  white-space: nowrap;
+}
+
+/* Card glow when resonating */
+.recording-card.resonating {
+  border-color: rgba(0, 255, 136, 0.4) !important;
+  box-shadow: 0 0 12px rgba(0, 255, 136, 0.15), inset 0 0 20px rgba(0, 255, 136, 0.03);
+}
+
 /* ── Scatter Overview ── */
 .overview-chart {
   background: var(--bg-card);
@@ -671,6 +843,10 @@
 
   .model-list-item h4 { font-size: 0.8rem; }
   .model-list-item p { font-size: 0.65rem; }
+
+  /* Hide walkthrough mode on mobile — orbit only */
+  .view-mode-toggle { display: none; }
+  .walkthrough-joystick { display: none !important; }
 
   /* ── Model audio section ── */
   .model-audio-section { padding: 8px 6px; }

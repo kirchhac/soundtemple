@@ -47,3 +47,29 @@ export function interpolateFreq(
   const frac = (t - times[lo]) / (times[hi] - times[lo] || 1);
   return freqs[lo] + frac * (freqs[hi] - freqs[lo]);
 }
+
+/**
+ * Interpolate an RMS value from a time series at a given playback time.
+ */
+export function interpolateRms(
+  times: number[],
+  rmsLevels: number[],
+  currentTime: number,
+  duration: number,
+): number {
+  if (!times.length || !rmsLevels.length || duration <= 0) return -40;
+  const tMin = times[0];
+  const tMax = times[times.length - 1];
+  const t = tMin + (currentTime / duration) * (tMax - tMin);
+  if (t <= tMin) return rmsLevels[0];
+  if (t >= tMax) return rmsLevels[rmsLevels.length - 1];
+  let lo = 0;
+  let hi = times.length - 1;
+  while (lo < hi - 1) {
+    const mid = (lo + hi) >> 1;
+    if (times[mid] <= t) lo = mid;
+    else hi = mid;
+  }
+  const frac = (t - times[lo]) / (times[hi] - times[lo] || 1);
+  return rmsLevels[lo] + frac * (rmsLevels[hi] - rmsLevels[lo]);
+}

@@ -3,8 +3,8 @@ import Plot from 'react-plotly.js';
 import type { FileDetail } from '../types';
 import { useAudioPlayback } from './useAudioPlayback';
 import AudioPlayer from './AudioPlayer';
-import PitchDisplay from './PitchDisplay';
-import { interpolateFreq } from './pitchUtils';
+import ResonationMeter, { RESONATION_THRESHOLD } from './ResonationMeter';
+import { interpolateFreq, interpolateRms } from './pitchUtils';
 
 function useIsMobile(breakpoint = 768) {
   const [mobile, setMobile] = useState(() => window.innerWidth <= breakpoint);
@@ -24,6 +24,38 @@ export const REFERENCE_LINES = [
   { freq: 120, label: 'Bb2 (120 Hz)', color: '#f87171' },
   { freq: 233, label: 'Bb3 (233 Hz)', color: '#a855f7' },
 ];
+
+// Detect resonation regions: segments where intensity exceeds threshold
+// and frequency is near the dome's resonant frequency
+function detectResonation(file: FileDetail) {
+  const { times, dominant_freqs, rms_levels } = file.time_series;
+  const RMS_THRESHOLD = RESONATION_THRESHOLD; // -16.5 dB — resonation audible above this
+  const FREQ_TOLERANCE = 10; // Hz — how close to dominant freq counts
+
+  const resonantFreq = file.strongest_freq_hz;
+  const regions: { start: number; end: number }[] = [];
+  let regionStart: number | null = null;
+
+  for (let i = 0; i < times.length; i++) {
+    const isResonating =
+      rms_levels[i] > RMS_THRESHOLD &&
+      Math.abs(dominant_freqs[i] - resonantFreq) <= FREQ_TOLERANCE;
+
+    if (isResonating && regionStart === null) {
+      regionStart = times[i];
+    } else if (!isResonating && regionStart !== null) {
+      regions.push({ start: regionStart, end: times[i - 1] });
+      regionStart = null;
+    }
+  }
+  // Close final region
+  if (regionStart !== null) {
+    regions.push({ start: regionStart, end: times[times.length - 1] });
+  }
+
+  return { regions, resonantFreq, threshold: RMS_THRESHOLD };
+}
+
 
 export default function DetailOverlayContent({
   file,
@@ -56,6 +88,20 @@ export default function DetailOverlayContent({
       )
     : 0;
 
+  // Interpolate real-time RMS level
+  const currentRms = isActive
+    ? interpolateRms(
+        times,
+        file.time_series.rms_levels,
+        currentTime,
+        duration,
+      )
+    : -40;
+
+  // Resonation detection
+  const resonation = React.useMemo(() => detectResonation(file), [file]);
+  const currentlyResonating = isActive && isPlaying && currentRms > RESONATION_THRESHOLD;
+
   const audioUrl = `/audio/${file.filename}`;
 
   return (
@@ -68,15 +114,24 @@ export default function DetailOverlayContent({
           {file.dominant_freq_hz} Hz ({file.dominant_note} {file.dominant_cents > 0 ? '+' : ''}{file.dominant_cents}c)
         </p>
 
-        {/* Pitch display + audio player */}
+        {/* Intensity meter + audio player */}
         <div className="detail-audio-section" onClick={e => e.stopPropagation()}>
-          {isActive && isPlaying && currentFreq > 0 ? (
-            <PitchDisplay freq={currentFreq} />
+          {isActive && isPlaying ? (
+            <ResonationMeter rmsLevel={currentRms} />
           ) : (
-            <PitchDisplay freq={file.dominant_freq_hz} />
+            <ResonationMeter rmsLevel={-40} />
           )}
           <AudioPlayer fileId={file.id} audioUrl={audioUrl} />
         </div>
+
+        {/* Resonation summary */}
+        {resonation.regions.length > 0 && (
+          <div className="resonation-info">
+            <span className="resonation-dot" />
+            Resonates at ~{resonation.resonantFreq} Hz when intensity &gt; {resonation.threshold} dB
+            ({resonation.regions.length} region{resonation.regions.length > 1 ? 's' : ''})
+          </div>
+        )}
 
         {/* Combined: frequency + intensity over time (dual y-axis) with tracking line */}
         <Plot
@@ -141,12 +196,31 @@ export default function DetailOverlayContent({
               showgrid: false,
             },
             shapes: [
+              // Resonation highlight regions
+              ...resonation.regions.map(r => ({
+                type: 'rect' as const,
+                x0: r.start, x1: r.end,
+                y0: 0, y1: 1, yref: 'paper' as const,
+                fillcolor: 'rgba(0, 255, 136, 0.08)',
+                line: { width: 0 },
+                layer: 'below' as const,
+              })),
+              // Resonation threshold line on intensity axis (-16.5 dB)
+              {
+                type: 'line' as const,
+                x0: 0, x1: 1, xref: 'paper' as const,
+                y0: RESONATION_THRESHOLD, y1: RESONATION_THRESHOLD,
+                yref: 'y2' as const,
+                line: { color: 'rgba(0, 255, 136, 0.7)', width: 2.5 },
+              },
+              // Reference note lines
               ...REFERENCE_LINES.map(r => ({
                 type: 'line' as const,
                 x0: 0, x1: 1, xref: 'paper' as const,
                 y0: r.freq, y1: r.freq,
                 line: { color: r.color, width: 1, dash: 'dot' as const },
               })),
+              // Playback position line
               ...(isActive && mappedTime > tMin
                 ? [{
                     type: 'line' as const,

@@ -69,10 +69,30 @@ export default function WalkthroughControls({
   }, [enabled, camera, gl]);
 
   // Keyboard events for WASD movement
+  const canvasHovered = useRef(false);
+
   useEffect(() => {
     if (!enabled) return;
 
-    const onKeyDown = (e: KeyboardEvent) => keys.current.add(e.code);
+    const el = gl.domElement;
+
+    const onEnter = () => { canvasHovered.current = true; };
+    const onLeave = () => { canvasHovered.current = false; };
+
+    el.addEventListener('pointerenter', onEnter);
+    el.addEventListener('pointerleave', onLeave);
+
+    const movementKeys = new Set([
+      'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space',
+      'KeyW', 'KeyA', 'KeyS', 'KeyD', 'ShiftLeft', 'ShiftRight',
+    ]);
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (canvasHovered.current && movementKeys.has(e.code)) {
+        e.preventDefault();
+      }
+      keys.current.add(e.code);
+    };
     const onKeyUp = (e: KeyboardEvent) => keys.current.delete(e.code);
 
     window.addEventListener('keydown', onKeyDown);
@@ -81,9 +101,12 @@ export default function WalkthroughControls({
     return () => {
       window.removeEventListener('keydown', onKeyDown);
       window.removeEventListener('keyup', onKeyUp);
+      el.removeEventListener('pointerenter', onEnter);
+      el.removeEventListener('pointerleave', onLeave);
       keys.current.clear();
+      canvasHovered.current = false;
     };
-  }, [enabled]);
+  }, [enabled, gl]);
 
   // Per-frame movement
   useFrame((_, delta) => {

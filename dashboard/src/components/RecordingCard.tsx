@@ -2,9 +2,9 @@ import React from 'react';
 import type { ManifestFile } from '../types';
 import MiniFreqGraph from './MiniFreqGraph';
 import AudioPlayer from './AudioPlayer';
-import PitchDisplay from './PitchDisplay';
+import ResonationMeter, { RESONATION_THRESHOLD } from './ResonationMeter';
 import { useAudioPlayback } from './useAudioPlayback';
-import { interpolateFreq } from './pitchUtils';
+import { interpolateFreq, interpolateRms } from './pitchUtils';
 import './RecordingCard.css';
 
 interface RecordingCardProps {
@@ -26,8 +26,19 @@ export default function RecordingCard({ file, onShowDetail }: RecordingCardProps
       ? interpolateFreq(ts.times, ts.freqs, currentTime, duration)
       : 0;
 
+  // Interpolate real-time RMS level
+  const currentRms =
+    isActive && ts && ts.rms_levels && ts.rms_levels.length > 0
+      ? interpolateRms(ts.times, ts.rms_levels, currentTime, duration)
+      : -40;
+
+  const isResonating = isThisPlaying && currentRms > RESONATION_THRESHOLD;
+
   return (
-    <div className="chart-card recording-card" onClick={() => onShowDetail(file)}>
+    <div
+      className={`chart-card recording-card ${isResonating ? 'resonating' : ''}`}
+      onClick={() => onShowDetail(file)}
+    >
       <div className="chart-card-header">
         <h4 className="chart-card-title" title={file.filename}>
           {file.filename.replace('.m4a', '')}
@@ -46,9 +57,9 @@ export default function RecordingCard({ file, onShowDetail }: RecordingCardProps
         {file.labeled_note && <span> &mdash; labeled: {file.labeled_note}</span>}
       </div>
 
-      {/* Real-time pitch display — appears when playing */}
+      {/* Real-time intensity meter — shows resonation state */}
       {isThisPlaying && currentFreq > 0 && (
-        <PitchDisplay freq={currentFreq} compact />
+        <ResonationMeter rmsLevel={currentRms} compact />
       )}
 
       {/* Mini frequency graph */}

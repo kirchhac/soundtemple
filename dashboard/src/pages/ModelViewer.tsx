@@ -113,6 +113,26 @@ function ObjModel({ model, autoRotate }: { model: ModelInfo; autoRotate: boolean
         setLoadedObj(obj);
       });
     });
+
+    // Dispose GPU resources on unmount
+    return () => {
+      setLoadedObj((prev) => {
+        if (prev) {
+          prev.traverse((child: THREE.Object3D) => {
+            if ((child as THREE.Mesh).isMesh) {
+              const mesh = child as THREE.Mesh;
+              mesh.geometry?.dispose();
+              const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+              mats.forEach(m => {
+                if ((m as any).map) (m as any).map.dispose();
+                m.dispose();
+              });
+            }
+          });
+        }
+        return null;
+      });
+    };
   }, [model.objPath, model.mtlPath]);
 
   // Slow rotation (gated on autoRotate)
@@ -303,6 +323,13 @@ export default function ModelViewer() {
           <Canvas
             camera={{ position: [3, 2, 3], fov: 50 }}
             style={{ background: '#0a0a0f' }}
+            onCreated={({ gl }) => {
+              const canvas = gl.domElement;
+              canvas.addEventListener('webglcontextlost', (e) => {
+                e.preventDefault();
+                console.warn('WebGL context lost — reload to restore 3D view');
+              });
+            }}
           >
             <ambientLight intensity={isWalkthrough ? 0.6 : 0.4} />
             <directionalLight position={[5, 5, 5]} intensity={0.8} />

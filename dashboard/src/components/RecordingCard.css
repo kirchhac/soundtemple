@@ -36,6 +36,12 @@
   border-radius: 3px;
 }
 
+.resonant-freq-badge.inactive {
+  color: #8888a0;
+  background: rgba(136, 136, 160, 0.08);
+  border-color: rgba(136, 136, 160, 0.25);
+}
+
 /* ── Real-time Hz + note display ── */
 .realtime-pitch {
   display: flex;

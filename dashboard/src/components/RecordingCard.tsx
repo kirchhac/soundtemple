@@ -61,7 +61,7 @@ export default function RecordingCard({ file, onShowDetail }: RecordingCardProps
       {resonantFreqs && resonantFreqs.length > 0 && (
         <div className="resonant-freq-display">
           {resonantFreqs.map((f, i) => (
-            <span key={i} className="resonant-freq-badge">
+            <span key={i} className={`resonant-freq-badge ${file.has_sustained_resonation ? '' : 'inactive'}`}>
               {f} Hz
             </span>
           ))}

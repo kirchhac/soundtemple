@@ -4,7 +4,7 @@ import type { FileDetail } from '../types';
 import { useAudioPlayback } from './useAudioPlayback';
 import AudioPlayer from './AudioPlayer';
 import ResonationMeter, { RESONATION_THRESHOLD } from './ResonationMeter';
-import { interpolateFreq, interpolateRms } from './pitchUtils';
+import { interpolateFreq, interpolateRms, freqToNote } from './pitchUtils';
 
 function useIsMobile(breakpoint = 768) {
   const [mobile, setMobile] = useState(() => window.innerWidth <= breakpoint);
@@ -114,8 +114,14 @@ export default function DetailOverlayContent({
           {file.dominant_freq_hz} Hz ({file.dominant_note} {file.dominant_cents > 0 ? '+' : ''}{file.dominant_cents}c)
         </p>
 
-        {/* Intensity meter + audio player */}
+        {/* Real-time Hz + note + intensity meter + audio player */}
         <div className="detail-audio-section" onClick={e => e.stopPropagation()}>
+          {isActive && isPlaying && currentFreq > 0 && (
+            <div className="realtime-pitch large">
+              <span className="realtime-hz">{Math.round(currentFreq)} Hz</span>
+              <span className="realtime-note">{freqToNote(currentFreq).fullName}</span>
+            </div>
+          )}
           {isActive && isPlaying ? (
             <ResonationMeter rmsLevel={currentRms} />
           ) : (
@@ -125,10 +131,12 @@ export default function DetailOverlayContent({
         </div>
 
         {/* Resonation summary */}
-        {resonation.regions.length > 0 && (
+        {file.resonant_freqs_hz && file.resonant_freqs_hz.length > 0 && (
           <div className="resonation-info">
             <span className="resonation-dot" />
-            Resonates at ~{resonation.resonantFreq} Hz when intensity &gt; {resonation.threshold} dB
+            Resonant {file.resonant_freqs_hz.length > 1 ? 'frequencies' : 'frequency'}:{' '}
+            {file.resonant_freqs_hz.map(f => `${f} Hz`).join(', ')}
+            {' '}&mdash; intensity &gt; {RESONATION_THRESHOLD} dB
             ({resonation.regions.length} region{resonation.regions.length > 1 ? 's' : ''})
           </div>
         )}

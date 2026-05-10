@@ -23,6 +23,7 @@ export interface ManifestFile {
   strongest_freq_hz: number;
   strongest_magnitude: number;
   spectral_peaks: SpectralPeak[];
+  resonant_freqs_hz?: number[];
   time_series_mini: { times: number[]; freqs: number[]; rms_levels?: number[] };
 }
 

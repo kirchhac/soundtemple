@@ -55,6 +55,27 @@ export interface FileDetail extends ManifestFile {
   };
 }
 
+export interface VideoAnalysis extends FileDetail {
+  video_filename: string;
+}
+
+export interface VideoManifest {
+  videos: VideoManifestEntry[];
+}
+
+export interface VideoManifestEntry {
+  id: string;
+  video_filename: string;
+  site: string;
+  city: string;
+  country?: string;
+  dominant_freq_hz: number;
+  dominant_note: string;
+  duration_s: number;
+  resonant_freqs_hz?: number[];
+  has_sustained_resonation?: boolean;
+}
+
 export interface ModelInfo {
   id: string;
   name: string;

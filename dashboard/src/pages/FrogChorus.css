@@ -198,3 +198,50 @@
   padding: 16px;
   font-style: italic;
 }
+
+.frog-figures-intro {
+  margin-bottom: 20px;
+}
+
+.frog-key-gray {
+  color: #9aa3b0;
+  font-weight: 600;
+}
+
+.frog-key-crimson {
+  color: #d65a66;
+  font-weight: 600;
+}
+
+.frog-figures {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.frog-figure {
+  margin: 0;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.frog-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.frog-figure figcaption {
+  padding: 10px 16px;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border);
+}
+
+.frog-figure figcaption strong {
+  color: var(--text-primary);
+}

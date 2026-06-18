@@ -46,6 +46,51 @@ const PLOTS = [
   { key: 'ici_distributions', title: 'Inter-call interval vs Poisson' },
 ];
 
+// Publication-style "random vs observed" figures (frogs/scripts/make_figures.py).
+const FIGURES = [
+  {
+    src: 'fig1_random_vs_observed__frogs_1.png',
+    title: 'What random looks like vs. what the frogs do',
+    caption:
+      'Identical calls, identical voices, 50 s window. Left: random (Poisson) ' +
+      'timing — an even texture. Right: the real chorus — calls collapse into ' +
+      'shared bursts. Bottom row: the population call-rate is constant under ' +
+      'randomness but swings between loud bursts and silence in the recording.',
+  },
+  {
+    src: 'fig2_null_test.png',
+    title: 'The observed structure is unreachable by chance',
+    caption:
+      'Each voice’s autocorrelation peak (crimson) against 400 rate-matched ' +
+      'random surrogates (gray). The observed value lands ≈2–6× beyond the ' +
+      'chance baseline and exceeds every surrogate in all 8 voices — p < 0.002.',
+  },
+  {
+    src: 'fig3_ici_distributions.png',
+    title: 'Intervals reject the random exponential law',
+    caption:
+      'Observed inter-call intervals (bars, log scale) vs. the exponential a ' +
+      'Poisson chorus predicts (dashed). A Kolmogorov–Smirnov test rejects the ' +
+      'exponential in every voice (p ≤ 9×10⁻⁶); calls peak at a preferred interval.',
+  },
+  {
+    src: 'fig4_autocorrelation.png',
+    title: 'Chorus rhythm rises above the noise floor',
+    caption:
+      'Composite call-train autocorrelation (crimson) escaping the 99% band of ' +
+      'independent-Poisson surrogates (gray): a sharp refractory shoulder and a ' +
+      'broad ≈2–3 s chorus envelope.',
+  },
+  {
+    src: 'fig5_synchrony.png',
+    title: 'Voices fire together — synchrony, not turn-taking',
+    caption:
+      'Cross-correlation peaks at lag 0 for a representative pair (a) and every ' +
+      'voice pair is positively correlated at lag 0 (b, c). A random chorus ' +
+      'would sit near 0; turn-taking would go negative.',
+  },
+];
+
 function formatP(p: number | null): string {
   if (p === null) return '—';
   if (p < 0.002) return '< 0.002';
@@ -228,7 +273,32 @@ export default function FrogChorus() {
       </section>
 
       <section className="frog-section">
-        <h3>Plots</h3>
+        <h3>Visual Proof — Random vs. Observed</h3>
+        <p className="frog-sub frog-figures-intro">
+          One visual language throughout:{' '}
+          <span className="frog-key-gray">gray = what randomness predicts</span>{' '}
+          (an independent Poisson chorus, H0),{' '}
+          <span className="frog-key-crimson">crimson = what the frogs do</span>.
+          Full captions and method in <code>frogs/FIGURES.md</code>.
+        </p>
+        <div className="frog-figures">
+          {FIGURES.map(f => (
+            <figure key={f.src} className="frog-figure">
+              <img
+                src={`/frogs/figures/${f.src}`}
+                alt={f.title}
+                loading="lazy"
+              />
+              <figcaption>
+                <strong>{f.title}.</strong> {f.caption}
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </section>
+
+      <section className="frog-section">
+        <h3>All Diagnostic Plots</h3>
         {RECORDINGS.map(r => (
           <div key={r.id} className="frog-plot-group">
             <h4>{r.title}</h4>

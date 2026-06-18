@@ -17,6 +17,21 @@ not (mostly) **sequential ordering** of intervals. We get there in detail
 below. The cross-voice plots also show a striking signature: voices align in
 **synchrony** at small lags, not turn-taking.
 
+## Visual proof
+
+The full set of publication-style figures is in
+**[`FIGURES.md`](FIGURES.md)**. The argument in one picture — identical calls,
+identical voices, random timing (left) vs. the real recording (right):
+
+![Random vs observed](figures/fig1_random_vs_observed__frogs_1.png)
+
+A random chorus is a flat texture; the real chorus collapses into shared
+bursts. `FIGURES.md` then shows the formal null-hypothesis test (the observed
+rhythm exceeds every random surrogate, Figure 2), the interval-distribution
+mismatch (Figure 3), the autocorrelation rising above the random band
+(Figure 4), and cross-voice synchrony (Figure 5). Regenerate everything with
+`.venv/bin/python frogs/scripts/make_figures.py`.
+
 ## 1. Did each voice's call train differ from a Poisson process?
 
 The autocorrelation-peak surrogate test (500 surrogates per voice) compares

@@ -186,6 +186,8 @@ not random.
 - `output/{recording_name}/results.json` — machine-readable summary with
   p-values and test statistics
 - `RESULTS.md` — human-readable summary tying findings back to H1/H0
+- `scripts/make_figures.py` + `figures/` — publication-style "random vs
+  observed" figures for the visual argument; captioned in `FIGURES.md`
 
 ## 8. Reproducibility
 

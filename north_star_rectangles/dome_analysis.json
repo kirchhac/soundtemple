@@ -1,0 +1,442 @@
+{
+  "source_file": "/Users/drew/soundtemple/north_star_rectangles/obj/5_2_2026.obj",
+  "vertex_count": 6863,
+  "bounding_box": {
+    "x_min": -0.641666,
+    "x_max": 2.434606,
+    "y_min": -1.086452,
+    "y_max": 2.943821,
+    "z_min": -2.558183,
+    "z_max": 2.114281,
+    "width_x": 3.076272,
+    "height_y": 4.030272999999999,
+    "depth_z": 4.672464
+  },
+  "cross_sections": [
+    {
+      "height_m": -1.036,
+      "n_points": 1679,
+      "extent_h1_m": 2.437,
+      "extent_h2_m": 3.821,
+      "max_radius_m": 2.261,
+      "mean_radius_m": 1.106,
+      "center_h1": 1.216,
+      "center_h2": 0.202
+    },
+    {
+      "height_m": -0.936,
+      "n_points": 867,
+      "extent_h1_m": 2.087,
+      "extent_h2_m": 4.672,
+      "max_radius_m": 2.532,
+      "mean_radius_m": 1.425,
+      "center_h1": 0.991,
+      "center_h2": -0.222
+    },
+    {
+      "height_m": -0.836,
+      "n_points": 90,
+      "extent_h1_m": 0.154,
+      "extent_h2_m": 4.671,
+      "max_radius_m": 2.336,
+      "mean_radius_m": 1.501,
+      "center_h1": 0.015,
+      "center_h2": -0.221
+    },
+    {
+      "height_m": -0.736,
+      "n_points": 69,
+      "extent_h1_m": 0.069,
+      "extent_h2_m": 4.667,
+      "max_radius_m": 2.334,
+      "mean_radius_m": 1.378,
+      "center_h1": -0.023,
+      "center_h2": -0.219
+    },
+    {
+      "height_m": -0.636,
+      "n_points": 91,
+      "extent_h1_m": 0.064,
+      "extent_h2_m": 4.653,
+      "max_radius_m": 2.326,
+      "mean_radius_m": 1.519,
+      "center_h1": -0.018,
+      "center_h2": -0.212
+    },
+    {
+      "height_m": -0.536,
+      "n_points": 100,
+      "extent_h1_m": 0.06,
+      "extent_h2_m": 4.615,
+      "max_radius_m": 2.307,
+      "mean_radius_m": 1.458,
+      "center_h1": -0.015,
+      "center_h2": -0.193
+    },
+    {
+      "height_m": -0.436,
+      "n_points": 183,
+      "extent_h1_m": 0.603,
+      "extent_h2_m": 4.587,
+      "max_radius_m": 2.311,
+      "mean_radius_m": 1.083,
+      "center_h1": -0.287,
+      "center_h2": -0.179
+    },
+    {
+      "height_m": -0.336,
+      "n_points": 220,
+      "extent_h1_m": 0.656,
+      "extent_h2_m": 4.583,
+      "max_radius_m": 2.313,
+      "mean_radius_m": 1.139,
+      "center_h1": -0.314,
+      "center_h2": -0.177
+    },
+    {
+      "height_m": -0.236,
+      "n_points": 138,
+      "extent_h1_m": 0.655,
+      "extent_h2_m": 4.547,
+      "max_radius_m": 2.295,
+      "mean_radius_m": 1.224,
+      "center_h1": -0.309,
+      "center_h2": -0.159
+    },
+    {
+      "height_m": -0.136,
+      "n_points": 124,
+      "extent_h1_m": 0.659,
+      "extent_h2_m": 4.532,
+      "max_radius_m": 2.287,
+      "mean_radius_m": 1.158,
+      "center_h1": -0.305,
+      "center_h2": -0.152
+    },
+    {
+      "height_m": -0.036,
+      "n_points": 135,
+      "extent_h1_m": 0.653,
+      "extent_h2_m": 4.52,
+      "max_radius_m": 2.281,
+      "mean_radius_m": 1.131,
+      "center_h1": -0.301,
+      "center_h2": -0.146
+    },
+    {
+      "height_m": 0.064,
+      "n_points": 322,
+      "extent_h1_m": 0.653,
+      "extent_h2_m": 4.503,
+      "max_radius_m": 2.273,
+      "mean_radius_m": 0.895,
+      "center_h1": -0.296,
+      "center_h2": -0.137
+    },
+    {
+      "height_m": 0.164,
+      "n_points": 268,
+      "extent_h1_m": 0.535,
+      "extent_h2_m": 4.497,
+      "max_radius_m": 2.261,
+      "mean_radius_m": 1.184,
+      "center_h1": -0.215,
+      "center_h2": -0.135
+    },
+    {
+      "height_m": 0.264,
+      "n_points": 117,
+      "extent_h1_m": 0.073,
+      "extent_h2_m": 4.493,
+      "max_radius_m": 2.247,
+      "mean_radius_m": 1.201,
+      "center_h1": 0.008,
+      "center_h2": -0.133
+    },
+    {
+      "height_m": 0.364,
+      "n_points": 121,
+      "extent_h1_m": 0.072,
+      "extent_h2_m": 4.488,
+      "max_radius_m": 2.244,
+      "mean_radius_m": 1.129,
+      "center_h1": 0.007,
+      "center_h2": -0.131
+    },
+    {
+      "height_m": 0.464,
+      "n_points": 76,
+      "extent_h1_m": 0.07,
+      "extent_h2_m": 4.481,
+      "max_radius_m": 2.241,
+      "mean_radius_m": 1.186,
+      "center_h1": 0.008,
+      "center_h2": -0.127
+    },
+    {
+      "height_m": 0.564,
+      "n_points": 83,
+      "extent_h1_m": 0.068,
+      "extent_h2_m": 4.471,
+      "max_radius_m": 2.236,
+      "mean_radius_m": 1.125,
+      "center_h1": 0.01,
+      "center_h2": -0.122
+    },
+    {
+      "height_m": 0.664,
+      "n_points": 72,
+      "extent_h1_m": 0.065,
+      "extent_h2_m": 4.449,
+      "max_radius_m": 2.225,
+      "mean_radius_m": 1.202,
+      "center_h1": 0.013,
+      "center_h2": -0.119
+    },
+    {
+      "height_m": 0.764,
+      "n_points": 67,
+      "extent_h1_m": 0.062,
+      "extent_h2_m": 4.44,
+      "max_radius_m": 2.22,
+      "mean_radius_m": 1.322,
+      "center_h1": 0.015,
+      "center_h2": -0.107
+    },
+    {
+      "height_m": 0.864,
+      "n_points": 107,
+      "extent_h1_m": 0.063,
+      "extent_h2_m": 4.406,
+      "max_radius_m": 2.203,
+      "mean_radius_m": 1.211,
+      "center_h1": 0.019,
+      "center_h2": -0.09
+    },
+    {
+      "height_m": 0.964,
+      "n_points": 108,
+      "extent_h1_m": 0.072,
+      "extent_h2_m": 4.34,
+      "max_radius_m": 2.17,
+      "mean_radius_m": 1.122,
+      "center_h1": 0.027,
+      "center_h2": -0.057
+    },
+    {
+      "height_m": 1.064,
+      "n_points": 109,
+      "extent_h1_m": 0.074,
+      "extent_h2_m": 4.285,
+      "max_radius_m": 2.143,
+      "mean_radius_m": 1.027,
+      "center_h1": 0.045,
+      "center_h2": -0.029
+    },
+    {
+      "height_m": 1.164,
+      "n_points": 97,
+      "extent_h1_m": 0.064,
+      "extent_h2_m": 4.238,
+      "max_radius_m": 2.119,
+      "mean_radius_m": 1.002,
+      "center_h1": 0.047,
+      "center_h2": -0.006
+    },
+    {
+      "height_m": 1.264,
+      "n_points": 111,
+      "extent_h1_m": 0.073,
+      "extent_h2_m": 4.207,
+      "max_radius_m": 2.104,
+      "mean_radius_m": 1.058,
+      "center_h1": 0.048,
+      "center_h2": 0.009
+    },
+    {
+      "height_m": 1.364,
+      "n_points": 107,
+      "extent_h1_m": 0.073,
+      "extent_h2_m": 4.193,
+      "max_radius_m": 2.096,
+      "mean_radius_m": 1.125,
+      "center_h1": 0.048,
+      "center_h2": 0.017
+    },
+    {
+      "height_m": 1.464,
+      "n_points": 103,
+      "extent_h1_m": 0.058,
+      "extent_h2_m": 4.178,
+      "max_radius_m": 2.089,
+      "mean_radius_m": 0.934,
+      "center_h1": 0.05,
+      "center_h2": 0.014
+    },
+    {
+      "height_m": 1.564,
+      "n_points": 98,
+      "extent_h1_m": 0.048,
+      "extent_h2_m": 4.187,
+      "max_radius_m": 2.094,
+      "mean_radius_m": 0.989,
+      "center_h1": 0.053,
+      "center_h2": 0.019
+    },
+    {
+      "height_m": 1.664,
+      "n_points": 97,
+      "extent_h1_m": 0.041,
+      "extent_h2_m": 4.187,
+      "max_radius_m": 2.093,
+      "mean_radius_m": 1.073,
+      "center_h1": 0.05,
+      "center_h2": 0.019
+    },
+    {
+      "height_m": 1.764,
+      "n_points": 85,
+      "extent_h1_m": 0.04,
+      "extent_h2_m": 4.187,
+      "max_radius_m": 2.093,
+      "mean_radius_m": 1.178,
+      "center_h1": 0.052,
+      "center_h2": 0.019
+    },
+    {
+      "height_m": 1.864,
+      "n_points": 73,
+      "extent_h1_m": 0.047,
+      "extent_h2_m": 4.187,
+      "max_radius_m": 2.093,
+      "mean_radius_m": 1.22,
+      "center_h1": 0.052,
+      "center_h2": 0.019
+    },
+    {
+      "height_m": 1.964,
+      "n_points": 75,
+      "extent_h1_m": 0.045,
+      "extent_h2_m": 4.187,
+      "max_radius_m": 2.093,
+      "mean_radius_m": 1.112,
+      "center_h1": 0.051,
+      "center_h2": 0.019
+    },
+    {
+      "height_m": 2.064,
+      "n_points": 83,
+      "extent_h1_m": 0.048,
+      "extent_h2_m": 4.186,
+      "max_radius_m": 2.093,
+      "mean_radius_m": 1.063,
+      "center_h1": 0.049,
+      "center_h2": 0.019
+    },
+    {
+      "height_m": 2.164,
+      "n_points": 79,
+      "extent_h1_m": 0.045,
+      "extent_h2_m": 4.184,
+      "max_radius_m": 2.092,
+      "mean_radius_m": 0.991,
+      "center_h1": 0.047,
+      "center_h2": 0.02
+    },
+    {
+      "height_m": 2.264,
+      "n_points": 89,
+      "extent_h1_m": 0.045,
+      "extent_h2_m": 4.182,
+      "max_radius_m": 2.091,
+      "mean_radius_m": 1.142,
+      "center_h1": 0.046,
+      "center_h2": 0.021
+    },
+    {
+      "height_m": 2.364,
+      "n_points": 93,
+      "extent_h1_m": 0.056,
+      "extent_h2_m": 4.182,
+      "max_radius_m": 2.091,
+      "mean_radius_m": 1.174,
+      "center_h1": 0.038,
+      "center_h2": 0.021
+    },
+    {
+      "height_m": 2.464,
+      "n_points": 76,
+      "extent_h1_m": 0.058,
+      "extent_h2_m": 4.186,
+      "max_radius_m": 2.093,
+      "mean_radius_m": 1.083,
+      "center_h1": 0.038,
+      "center_h2": 0.019
+    },
+    {
+      "height_m": 2.564,
+      "n_points": 79,
+      "extent_h1_m": 0.058,
+      "extent_h2_m": 4.201,
+      "max_radius_m": 2.101,
+      "mean_radius_m": 1.208,
+      "center_h1": 0.037,
+      "center_h2": 0.01
+    },
+    {
+      "height_m": 2.664,
+      "n_points": 80,
+      "extent_h1_m": 0.065,
+      "extent_h2_m": 4.206,
+      "max_radius_m": 2.103,
+      "mean_radius_m": 1.188,
+      "center_h1": 0.032,
+      "center_h2": 0.005
+    },
+    {
+      "height_m": 2.764,
+      "n_points": 87,
+      "extent_h1_m": 0.083,
+      "extent_h2_m": 4.212,
+      "max_radius_m": 2.107,
+      "mean_radius_m": 1.221,
+      "center_h1": 0.023,
+      "center_h2": 0.001
+    },
+    {
+      "height_m": 2.864,
+      "n_points": 98,
+      "extent_h1_m": 0.085,
+      "extent_h2_m": 4.199,
+      "max_radius_m": 2.1,
+      "mean_radius_m": 1.154,
+      "center_h1": 0.019,
+      "center_h2": 0.009
+    },
+    {
+      "height_m": 2.964,
+      "n_points": 107,
+      "extent_h1_m": 0.09,
+      "extent_h2_m": 4.178,
+      "max_radius_m": 2.09,
+      "mean_radius_m": 1.173,
+      "center_h1": 0.015,
+      "center_h2": 0.016
+    }
+  ],
+  "dome_profile": {
+    "floor_level_m": -1.036,
+    "apex_level_m": 2.964,
+    "drum_top_m": -0.936,
+    "max_floor_extent_h1_m": 2.437,
+    "max_floor_extent_h2_m": 3.821
+  },
+  "acoustic_estimates": {
+    "speed_of_sound_mps": 343.0,
+    "f1_x_hz": 55.7,
+    "f1_y_hz": 42.6,
+    "f1_z_hz": 36.7,
+    "f1_diagonal_hz": 30.7,
+    "measured_resonance_hz": 93.0
+  }
+}

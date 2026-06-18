@@ -1,0 +1,200 @@
+.frog-chorus {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-bottom: 64px;
+}
+
+.frog-header {
+  margin-bottom: 32px;
+}
+
+.frog-header h2 {
+  margin: 0 0 8px;
+  background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 1.6rem;
+}
+
+.frog-sub {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.frog-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.frog-section h3 {
+  margin: 0 0 16px;
+  font-size: 1.1rem;
+  color: var(--accent-cyan);
+  letter-spacing: 0.03em;
+}
+
+.frog-section h4 {
+  margin: 16px 0 12px;
+  color: var(--text-primary);
+  font-size: 1rem;
+}
+
+.frog-section p {
+  line-height: 1.6;
+  color: var(--text-primary);
+  margin: 0 0 12px;
+}
+
+.frog-section code {
+  background: var(--bg-secondary);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.85em;
+  color: var(--accent-orange);
+}
+
+.frog-recordings {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+.frog-recording-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.frog-recording-title {
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.frog-recording-duration {
+  color: var(--text-secondary);
+  font-weight: 400;
+  font-size: 0.85rem;
+  margin-left: 8px;
+}
+
+.frog-recording-card audio {
+  width: 100%;
+}
+
+.frog-recording-results {
+  margin-bottom: 24px;
+}
+
+.frog-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.frog-table th,
+.frog-table td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.frog-table th {
+  color: var(--text-secondary);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.7rem;
+}
+
+.frog-table tbody tr:hover {
+  background: var(--bg-card-hover);
+}
+
+.frog-band {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+
+.frog-mono {
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.85rem;
+}
+
+.verdict {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.verdict-yes {
+  background: rgba(52, 211, 153, 0.15);
+  color: var(--accent-green);
+  border: 1px solid rgba(52, 211, 153, 0.3);
+}
+
+.verdict-no {
+  background: rgba(248, 113, 113, 0.15);
+  color: var(--accent-red);
+  border: 1px solid rgba(248, 113, 113, 0.3);
+}
+
+.verdict-skip {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+
+.frog-takeaways {
+  margin: 0;
+  padding-left: 20px;
+  line-height: 1.6;
+}
+
+.frog-takeaways li {
+  margin-bottom: 10px;
+}
+
+.frog-plot-group {
+  margin-bottom: 24px;
+}
+
+.frog-plot-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: 16px;
+}
+
+.frog-plot {
+  margin: 0;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.frog-plot img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.frog-plot figcaption {
+  padding: 8px 12px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  border-top: 1px solid var(--border);
+}
+
+.frog-results-loading {
+  color: var(--text-secondary);
+  padding: 16px;
+  font-style: italic;
+}

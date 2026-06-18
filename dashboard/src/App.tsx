@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
 import FrequencyDashboard from './pages/FrequencyDashboard';
 import ModelViewer from './pages/ModelViewer';
+import FrogChorus from './pages/FrogChorus';
 import './App.css';
 
 function App() {
@@ -20,12 +21,16 @@ function App() {
             <NavLink to="/models" className={({ isActive }) => isActive ? 'active' : ''}>
               3D LiDAR Scans
             </NavLink>
+            <NavLink to="/frogs" className={({ isActive }) => isActive ? 'active' : ''}>
+              Frog Chorus
+            </NavLink>
           </div>
         </nav>
         <main className="main">
           <Routes>
             <Route path="/" element={<FrequencyDashboard />} />
             <Route path="/models" element={<ModelViewer />} />
+            <Route path="/frogs" element={<FrogChorus />} />
           </Routes>
         </main>
       </div>

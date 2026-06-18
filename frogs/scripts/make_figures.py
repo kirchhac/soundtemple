@@ -354,21 +354,23 @@ def fig2_null_test():
             ax.plot([obs], [0], marker="^", ms=8, color=C["observed"],
                     clip_on=False, zorder=5)
 
-            # headroom so the observed line + labels have room on the right
-            ax.set_xlim(0, max(obs, null.max()) * 1.18)
+            # widen so the observed line and its labels sit in clear whitespace
+            # to the RIGHT of the line (never crossing it)
+            xmax = max(obs, null.max()) * 1.4
+            ax.set_xlim(0, xmax)
             despine(ax, keep=("left", "bottom"))
             soft_grid(ax)
 
+            ymax = ax.get_ylim()[1]
             factor = obs / max(null.mean(), 1e-9)
-            ax.text(obs, ax.get_ylim()[1] * 0.94,
-                    f"observed\n{obs:.3f}", color=C["observed_d"],
-                    ha="right", va="top", fontsize=8.3, fontweight="bold")
-            ax.text(0.97, 0.62, fmt_p(s["p_vs_poisson"]),
-                    transform=ax.transAxes, ha="right", va="top",
-                    fontsize=8.6, color=C["ink"])
-            ax.text(0.97, 0.50, rf"$\approx\!{factor:.0f}\times$ chance",
-                    transform=ax.transAxes, ha="right", va="top",
-                    fontsize=8.0, color=C["muted"])
+            pad = (xmax - obs) * 0.07
+            ax.text(obs + pad, ymax * 0.97, f"observed\n{obs:.3f}",
+                    color=C["observed_d"], ha="left", va="top",
+                    fontsize=8.3, fontweight="bold")
+            ax.text(obs + pad, ymax * 0.63, fmt_p(s["p_vs_poisson"]),
+                    color=C["ink"], ha="left", va="top", fontsize=8.4)
+            ax.text(obs + pad, ymax * 0.52, rf"$\approx\!{factor:.0f}\times$ chance",
+                    color=C["muted"], ha="left", va="top", fontsize=7.8)
 
             if i == 0:
                 ax.set_title(f"{v}\n{band_label(results, v)}", fontsize=9.6)

@@ -1,247 +1,433 @@
-.frog-chorus {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding-bottom: 64px;
+/* ──────────────────────────────────────────────────────────────────────────
+   Frog Chorus — rendered as a traditional academic paper (light "sheet")
+   sitting on the dark dashboard. The publication figures have white
+   backgrounds, so a white paper surface lets them blend seamlessly.
+   ────────────────────────────────────────────────────────────────────────── */
+
+.frog-paper {
+  --ink: #1a1a22;
+  --ink-soft: #41414c;
+  --muted: #6b6b76;
+  --paper: #fcfcfa;
+  --rule: #e6e5df;
+  --rule-soft: #efeee9;
+  --crimson: #c42e3a;
+  --crimson-deep: #8e1f28;
+
+  max-width: 880px;
+  margin: 0 auto 64px;
+  padding: 56px 64px 64px;
+  background: var(--paper);
+  color: var(--ink);
+  border-radius: 6px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 12px 40px rgba(0, 0, 0, 0.35);
+  font-family: 'Iowan Old Style', 'Palatino Linotype', 'Palatino', 'Charter',
+    Georgia, 'Times New Roman', serif;
+  font-size: 17px;
+  line-height: 1.62;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
 
-.frog-header {
-  margin-bottom: 32px;
+/* ── Title block ── */
+.paper-head {
+  text-align: center;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 26px;
+  margin-bottom: 30px;
 }
 
-.frog-header h2 {
-  margin: 0 0 8px;
-  background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-size: 1.6rem;
+.paper-venue {
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 14px;
 }
 
-.frog-sub {
-  color: var(--text-secondary);
-  font-size: 0.95rem;
-  line-height: 1.5;
-  margin: 0;
+.paper-title {
+  font-size: 1.96rem;
+  line-height: 1.18;
+  font-weight: 700;
+  margin: 0 0 10px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  -webkit-text-fill-color: currentColor; /* override dashboard gradient h1/h2 */
+  background: none;
 }
 
-.frog-section {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 24px;
-  margin-bottom: 24px;
+.paper-subtitle {
+  font-size: 1.08rem;
+  font-style: italic;
+  color: var(--ink-soft);
+  margin: 0 auto 18px;
+  max-width: 90%;
+  line-height: 1.4;
 }
 
-.frog-section h3 {
-  margin: 0 0 16px;
-  font-size: 1.1rem;
-  color: var(--accent-cyan);
-  letter-spacing: 0.03em;
-}
-
-.frog-section h4 {
-  margin: 16px 0 12px;
-  color: var(--text-primary);
+.paper-authors {
   font-size: 1rem;
+  color: var(--ink);
+  margin-bottom: 4px;
 }
 
-.frog-section p {
-  line-height: 1.6;
-  color: var(--text-primary);
+.paper-meta {
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+/* ── Abstract ── */
+.paper-abstract {
+  margin: 0 28px 34px;
+  padding: 20px 26px;
+  border-top: 1.5px solid var(--ink);
+  border-bottom: 1.5px solid var(--ink);
+}
+
+.paper-abstract h2 {
+  text-align: center;
+  font-size: 0.82rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
   margin: 0 0 12px;
+  border: none;
+  padding: 0;
+  color: var(--ink);
 }
 
-.frog-section code {
-  background: var(--bg-secondary);
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 0.85em;
-  color: var(--accent-orange);
+.paper-abstract p {
+  margin: 0;
+  font-size: 0.95rem;
+  text-align: justify;
+  hyphens: auto;
 }
 
-.frog-recordings {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 16px;
-}
-
-.frog-recording-card {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 16px;
-}
-
-.frog-recording-title {
-  font-weight: 600;
-  margin-bottom: 12px;
-}
-
-.frog-recording-duration {
-  color: var(--text-secondary);
-  font-weight: 400;
+.paper-keywords {
+  margin-top: 14px;
   font-size: 0.85rem;
-  margin-left: 8px;
+  color: var(--ink-soft);
 }
 
-.frog-recording-card audio {
+/* ── Table of contents ── */
+.paper-toc {
+  margin: 0 0 38px;
+  padding: 14px 20px;
+  background: #f6f5f0;
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+  font-size: 0.9rem;
+}
+
+.paper-toc .toc-label {
+  font-variant: small-caps;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-right: 8px;
+}
+
+.paper-toc ol {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.paper-toc li {
+  display: inline;
+}
+
+.paper-toc li::after {
+  content: ' · ';
+  color: var(--rule);
+}
+
+.paper-toc li:last-child::after {
+  content: '';
+}
+
+/* ── Sections ── */
+.paper-section {
+  margin-bottom: 14px;
+}
+
+.paper-section h2 {
+  font-size: 1.32rem;
+  font-weight: 700;
+  margin: 34px 0 14px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--rule);
+  color: var(--ink);
+  -webkit-text-fill-color: currentColor;
+  background: none;
+  letter-spacing: 0;
+}
+
+.paper-section h3 {
+  font-size: 1.06rem;
+  font-weight: 700;
+  margin: 22px 0 8px;
+  color: var(--ink);
+}
+
+.paper-section p {
+  margin: 0 0 14px;
+  text-align: justify;
+  hyphens: auto;
+  color: var(--ink);
+}
+
+.paper-section em { font-style: italic; }
+
+.frog-paper a {
+  color: var(--crimson-deep);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(142, 31, 40, 0.3);
+}
+
+.frog-paper a:hover {
+  border-bottom-color: var(--crimson-deep);
+}
+
+.frog-paper code {
+  font-family: 'JetBrains Mono', Menlo, Consolas, monospace;
+  font-size: 0.82em;
+  background: #f0efea;
+  color: var(--crimson-deep);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+.paper-note {
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+
+/* ── Hypotheses callout ── */
+.paper-hyp {
+  margin: 16px 0 8px;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.hyp-row {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 14px 18px;
+  font-size: 0.95rem;
+}
+
+.hyp-row + .hyp-row {
+  border-top: 1px solid var(--rule);
+  background: #faf9f4;
+}
+
+.hyp-tag {
+  flex-shrink: 0;
+  font-family: 'JetBrains Mono', Menlo, monospace;
+  font-weight: 700;
+  font-size: 0.8rem;
+  padding: 3px 9px;
+  border-radius: 4px;
+  margin-top: 2px;
+}
+
+.hyp-tag.h1 { background: rgba(196, 46, 58, 0.12); color: var(--crimson-deep); }
+.hyp-tag.h0 { background: #e8e8e4; color: var(--ink-soft); }
+
+/* ── Recordings ── */
+.paper-recordings {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin: 16px 0 6px;
+}
+
+.paper-rec {
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 14px 16px;
+  background: #f8f7f2;
+}
+
+.paper-rec-title {
+  font-weight: 700;
+  margin-bottom: 10px;
+  font-size: 0.95rem;
+}
+
+.paper-rec-dur {
+  color: var(--muted);
+  font-weight: 400;
+  font-size: 0.82rem;
+  margin-left: 6px;
+}
+
+.paper-rec audio {
   width: 100%;
+  height: 34px;
 }
 
-.frog-recording-results {
-  margin-bottom: 24px;
+/* ── Results table ── */
+.paper-table-wrap {
+  margin: 16px 0;
+  overflow-x: auto;
 }
 
-.frog-table {
+.paper-table-cap {
+  font-weight: 700;
+  font-size: 0.92rem;
+  margin-bottom: 6px;
+}
+
+.paper-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.85rem;
+  font-size: 0.86rem;
+  font-family: 'Iowan Old Style', Georgia, serif;
 }
 
-.frog-table th,
-.frog-table td {
+.paper-table th,
+.paper-table td {
   text-align: left;
-  padding: 10px 12px;
-  border-bottom: 1px solid var(--border);
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--rule);
 }
 
-.frog-table th {
-  color: var(--text-secondary);
-  font-weight: 500;
+.paper-table thead th {
+  border-top: 1.5px solid var(--ink);
+  border-bottom: 1.5px solid var(--ink);
+  font-size: 0.72rem;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+  font-weight: 700;
 }
 
-.frog-table tbody tr:hover {
-  background: var(--bg-card-hover);
-}
+.paper-table tbody tr:hover { background: #f7f6f1; }
 
-.frog-band {
-  color: var(--text-secondary);
-  font-size: 0.8rem;
-}
+.paper-band { color: var(--muted); font-size: 0.78rem; }
 
-.frog-mono {
-  font-family: 'SF Mono', Menlo, Consolas, monospace;
-  font-size: 0.85rem;
+.paper-mono {
+  font-family: 'JetBrains Mono', Menlo, Consolas, monospace;
+  font-size: 0.82rem;
+  font-variant-numeric: tabular-nums;
 }
 
 .verdict {
   display: inline-block;
-  padding: 3px 10px;
+  padding: 2px 9px;
   border-radius: 4px;
-  font-size: 0.75rem;
-  font-weight: 600;
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 
-.verdict-yes {
-  background: rgba(52, 211, 153, 0.15);
-  color: var(--accent-green);
-  border: 1px solid rgba(52, 211, 153, 0.3);
-}
+.verdict-yes { background: rgba(196, 46, 58, 0.12); color: var(--crimson-deep); }
+.verdict-no { background: #e8e8e4; color: var(--ink-soft); }
+.verdict-skip { background: #f0efea; color: var(--muted); }
 
-.verdict-no {
-  background: rgba(248, 113, 113, 0.15);
-  color: var(--accent-red);
-  border: 1px solid rgba(248, 113, 113, 0.3);
-}
-
-.verdict-skip {
-  background: var(--bg-secondary);
-  color: var(--text-secondary);
-  border: 1px solid var(--border);
-}
-
-.frog-takeaways {
-  margin: 0;
-  padding-left: 20px;
-  line-height: 1.6;
-}
-
-.frog-takeaways li {
-  margin-bottom: 10px;
-}
-
-.frog-plot-group {
-  margin-bottom: 24px;
-}
-
-.frog-plot-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
-  gap: 16px;
-}
-
-.frog-plot {
-  margin: 0;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.frog-plot img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-.frog-plot figcaption {
-  padding: 8px 12px;
-  font-size: 0.8rem;
-  color: var(--text-secondary);
-  border-top: 1px solid var(--border);
-}
-
-.frog-results-loading {
-  color: var(--text-secondary);
-  padding: 16px;
+.paper-loading {
+  color: var(--muted);
   font-style: italic;
+  padding: 14px 0;
 }
 
-.frog-figures-intro {
-  margin-bottom: 20px;
+/* ── Figures ── */
+.paper-figure {
+  margin: 26px 0;
+  scroll-margin-top: 80px;
 }
 
-.frog-key-gray {
-  color: #9aa3b0;
-  font-weight: 600;
-}
-
-.frog-key-crimson {
-  color: #d65a66;
-  font-weight: 600;
-}
-
-.frog-figures {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.frog-figure {
-  margin: 0;
-  background: #ffffff;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.frog-figure img {
+.paper-figure img {
   display: block;
   width: 100%;
   height: auto;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
 }
 
-.frog-figure figcaption {
-  padding: 10px 16px;
-  font-size: 0.82rem;
+.paper-figure figcaption {
+  margin-top: 12px;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  padding-left: 16px;
+  border-left: 2px solid var(--rule);
+}
+
+.paper-figure figcaption p { margin: 0 0 7px; text-align: left; }
+.paper-figure figcaption p:last-child { margin-bottom: 0; }
+
+.fig-cap-title {
+  font-size: 0.95rem;
+  color: var(--ink);
+}
+
+.fig-num { font-weight: 700; color: var(--crimson-deep); }
+
+.fig-lbl {
+  font-weight: 700;
+  font-style: italic;
+  color: var(--ink);
+  margin-right: 4px;
+}
+
+/* ── References ── */
+.paper-refs {
+  margin: 8px 0 0;
+  padding-left: 26px;
+  font-size: 0.88rem;
   line-height: 1.5;
-  color: var(--text-secondary);
-  background: var(--bg-secondary);
-  border-top: 1px solid var(--border);
+  color: var(--ink-soft);
 }
 
-.frog-figure figcaption strong {
-  color: var(--text-primary);
+.paper-refs li { margin-bottom: 8px; padding-left: 4px; }
+
+/* ── Appendix ── */
+.paper-appendix-group { margin-bottom: 22px; }
+
+.paper-appendix-group h3 { font-size: 1rem; }
+
+.paper-appendix-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 14px;
+}
+
+.paper-appendix-plot {
+  margin: 0;
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.paper-appendix-plot img { display: block; width: 100%; height: auto; }
+
+.paper-appendix-plot figcaption {
+  padding: 7px 11px;
+  font-size: 0.78rem;
+  color: var(--muted);
+  border-top: 1px solid var(--rule);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .frog-paper {
+    padding: 28px 18px 36px;
+    font-size: 16px;
+    border-radius: 0;
+    margin-bottom: 24px;
+  }
+  .paper-title { font-size: 1.5rem; }
+  .paper-subtitle { font-size: 0.98rem; max-width: 100%; }
+  .paper-abstract { margin: 0 0 28px; padding: 16px 14px; }
+  .paper-section p { text-align: left; hyphens: none; }
+  .paper-abstract p { text-align: left; hyphens: none; }
+  .paper-toc { font-size: 0.85rem; }
+  .paper-figure figcaption { font-size: 0.86rem; }
 }

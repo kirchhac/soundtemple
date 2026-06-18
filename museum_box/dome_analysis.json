@@ -1,0 +1,182 @@
+{
+  "source_file": "/Users/drew/soundtemple/museum_box/obj/4_30_2026.obj",
+  "vertex_count": 27176,
+  "bounding_box": {
+    "x_min": -0.704818,
+    "x_max": -0.065393,
+    "y_min": -0.517707,
+    "y_max": 0.231479,
+    "z_min": -0.294842,
+    "z_max": 0.289914,
+    "width_x": 0.6394249999999999,
+    "height_y": 0.749186,
+    "depth_z": 0.584756
+  },
+  "cross_sections": [
+    {
+      "height_m": -0.493,
+      "n_points": 589,
+      "extent_h1_m": 0.096,
+      "extent_h2_m": 0.558,
+      "max_radius_m": 0.283,
+      "mean_radius_m": 0.166,
+      "center_h1": -0.163,
+      "center_h2": -0.016
+    },
+    {
+      "height_m": -0.443,
+      "n_points": 487,
+      "extent_h1_m": 0.113,
+      "extent_h2_m": 0.558,
+      "max_radius_m": 0.284,
+      "mean_radius_m": 0.169,
+      "center_h1": -0.15,
+      "center_h2": -0.014
+    },
+    {
+      "height_m": -0.393,
+      "n_points": 719,
+      "extent_h1_m": 0.136,
+      "extent_h2_m": 0.553,
+      "max_radius_m": 0.284,
+      "mean_radius_m": 0.168,
+      "center_h1": -0.135,
+      "center_h2": -0.011
+    },
+    {
+      "height_m": -0.343,
+      "n_points": 993,
+      "extent_h1_m": 0.533,
+      "extent_h2_m": 0.541,
+      "max_radius_m": 0.379,
+      "mean_radius_m": 0.224,
+      "center_h1": -0.333,
+      "center_h2": -0.01
+    },
+    {
+      "height_m": -0.293,
+      "n_points": 6301,
+      "extent_h1_m": 0.639,
+      "extent_h2_m": 0.559,
+      "max_radius_m": 0.402,
+      "mean_radius_m": 0.237,
+      "center_h1": -0.385,
+      "center_h2": 0.009
+    },
+    {
+      "height_m": -0.243,
+      "n_points": 1899,
+      "extent_h1_m": 0.635,
+      "extent_h2_m": 0.556,
+      "max_radius_m": 0.398,
+      "mean_radius_m": 0.311,
+      "center_h1": -0.386,
+      "center_h2": 0.012
+    },
+    {
+      "height_m": -0.193,
+      "n_points": 2275,
+      "extent_h1_m": 0.617,
+      "extent_h2_m": 0.555,
+      "max_radius_m": 0.391,
+      "mean_radius_m": 0.304,
+      "center_h1": -0.391,
+      "center_h2": 0.011
+    },
+    {
+      "height_m": -0.143,
+      "n_points": 2362,
+      "extent_h1_m": 0.605,
+      "extent_h2_m": 0.547,
+      "max_radius_m": 0.388,
+      "mean_radius_m": 0.301,
+      "center_h1": -0.393,
+      "center_h2": 0.008
+    },
+    {
+      "height_m": -0.093,
+      "n_points": 2335,
+      "extent_h1_m": 0.604,
+      "extent_h2_m": 0.535,
+      "max_radius_m": 0.389,
+      "mean_radius_m": 0.289,
+      "center_h1": -0.391,
+      "center_h2": 0.008
+    },
+    {
+      "height_m": -0.043,
+      "n_points": 2033,
+      "extent_h1_m": 0.603,
+      "extent_h2_m": 0.501,
+      "max_radius_m": 0.392,
+      "mean_radius_m": 0.285,
+      "center_h1": -0.388,
+      "center_h2": 0.003
+    },
+    {
+      "height_m": 0.007,
+      "n_points": 1780,
+      "extent_h1_m": 0.595,
+      "extent_h2_m": 0.489,
+      "max_radius_m": 0.385,
+      "mean_radius_m": 0.257,
+      "center_h1": -0.386,
+      "center_h2": 0.008
+    },
+    {
+      "height_m": 0.057,
+      "n_points": 2312,
+      "extent_h1_m": 0.533,
+      "extent_h2_m": 0.481,
+      "max_radius_m": 0.359,
+      "mean_radius_m": 0.206,
+      "center_h1": -0.412,
+      "center_h2": 0.004
+    },
+    {
+      "height_m": 0.107,
+      "n_points": 2202,
+      "extent_h1_m": 0.522,
+      "extent_h2_m": 0.481,
+      "max_radius_m": 0.355,
+      "mean_radius_m": 0.166,
+      "center_h1": -0.408,
+      "center_h2": 0.004
+    },
+    {
+      "height_m": 0.157,
+      "n_points": 423,
+      "extent_h1_m": 0.049,
+      "extent_h2_m": 0.471,
+      "max_radius_m": 0.237,
+      "mean_radius_m": 0.13,
+      "center_h1": -0.173,
+      "center_h2": 0.007
+    },
+    {
+      "height_m": 0.207,
+      "n_points": 466,
+      "extent_h1_m": 0.045,
+      "extent_h2_m": 0.449,
+      "max_radius_m": 0.226,
+      "mean_radius_m": 0.11,
+      "center_h1": -0.174,
+      "center_h2": 0.008
+    }
+  ],
+  "dome_profile": {
+    "floor_level_m": -0.493,
+    "apex_level_m": 0.207,
+    "drum_top_m": -0.493,
+    "max_floor_extent_h1_m": 0.639,
+    "max_floor_extent_h2_m": 0.559
+  },
+  "acoustic_estimates": {
+    "speed_of_sound_mps": 343.0,
+    "f1_x_hz": 268.2,
+    "f1_y_hz": 228.9,
+    "f1_z_hz": 293.3,
+    "f1_diagonal_hz": 197.9,
+    "measured_resonance_hz": 93.0
+  }
+}

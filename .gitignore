@@ -2,3 +2,15 @@ node_modules/
 build/
 .DS_Store
 *.log
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Local test outputs
+test_overlay*.mp4
+
+# Claude Code session metadata
+.claude/

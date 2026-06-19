@@ -101,7 +101,6 @@ export default function DetailOverlayContent({
 
   // Resonation detection
   const resonation = React.useMemo(() => detectResonation(file), [file]);
-  const currentlyResonating = isActive && isPlaying && currentRms > RESONATION_THRESHOLD;
 
   const audioUrl = mediaUrl(`/audio/${file.filename}`);
 

@@ -75,9 +75,11 @@ export default function WalkthroughControls({
     if (!enabled) return;
 
     const el = gl.domElement;
+    const keysSet = keys.current;
+    const hoveredRef = canvasHovered;
 
-    const onEnter = () => { canvasHovered.current = true; };
-    const onLeave = () => { canvasHovered.current = false; };
+    const onEnter = () => { hoveredRef.current = true; };
+    const onLeave = () => { hoveredRef.current = false; };
 
     el.addEventListener('pointerenter', onEnter);
     el.addEventListener('pointerleave', onLeave);
@@ -88,12 +90,12 @@ export default function WalkthroughControls({
     ]);
 
     const onKeyDown = (e: KeyboardEvent) => {
-      if (canvasHovered.current && movementKeys.has(e.code)) {
+      if (hoveredRef.current && movementKeys.has(e.code)) {
         e.preventDefault();
       }
-      keys.current.add(e.code);
+      keysSet.add(e.code);
     };
-    const onKeyUp = (e: KeyboardEvent) => keys.current.delete(e.code);
+    const onKeyUp = (e: KeyboardEvent) => keysSet.delete(e.code);
 
     window.addEventListener('keydown', onKeyDown);
     window.addEventListener('keyup', onKeyUp);
@@ -103,8 +105,8 @@ export default function WalkthroughControls({
       window.removeEventListener('keyup', onKeyUp);
       el.removeEventListener('pointerenter', onEnter);
       el.removeEventListener('pointerleave', onLeave);
-      keys.current.clear();
-      canvasHovered.current = false;
+      keysSet.clear();
+      hoveredRef.current = false;
     };
   }, [enabled, gl]);
 
@@ -159,6 +161,10 @@ export default function WalkthroughControls({
 
 // ── Mobile Joystick Overlay ──
 
+const PAD_RADIUS = 60; // half of 120px pad
+const KNOB_RADIUS = 20; // half of 40px knob
+const MAX_OFFSET = PAD_RADIUS - KNOB_RADIUS;
+
 interface MobileJoystickProps {
   joystickRef: MutableRefObject<{ x: number; y: number }>;
 }
@@ -168,10 +174,6 @@ export function MobileJoystick({ joystickRef }: MobileJoystickProps) {
   const knobRef = useRef<HTMLDivElement>(null);
   const activePointer = useRef<number | null>(null);
   const padCenter = useRef({ x: 0, y: 0 });
-
-  const PAD_RADIUS = 60; // half of 120px pad
-  const KNOB_RADIUS = 20; // half of 40px knob
-  const MAX_OFFSET = PAD_RADIUS - KNOB_RADIUS;
 
   useEffect(() => {
     const pad = padRef.current;

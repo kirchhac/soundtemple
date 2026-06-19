@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { mediaUrl } from '../lib/media';
 import './FrogChorus.css';
 
 type SurrogateResult = {
@@ -169,7 +170,7 @@ export default function FrogChorus() {
   useEffect(() => {
     Promise.all(
       RECORDINGS.map(r =>
-        fetch(`/frogs/plots/${r.id}/results.json`)
+        fetch(mediaUrl(`/frogs/plots/${r.id}/results.json`))
           .then(res => res.json())
           .then((data: Results) => [r.id, data] as const)
           .catch(() => [r.id, null] as const),
@@ -322,7 +323,7 @@ export default function FrogChorus() {
               <div className="paper-rec-title">
                 {r.title} <span className="paper-rec-dur">{r.duration}</span>
               </div>
-              <audio controls preload="metadata" src={`/frogs/audio/${r.id}.m4a`} />
+              <audio controls preload="metadata" src={mediaUrl(`/frogs/audio/${r.id}.m4a`)} />
             </div>
           ))}
         </div>
@@ -438,7 +439,7 @@ export default function FrogChorus() {
         </p>
         {FIGURES.map((f, i) => (
           <figure className="paper-figure" id={`fig${i + 1}`} key={f.src}>
-            <img src={`/frogs/figures/${f.src}`} alt={f.title} loading="lazy" />
+            <img src={mediaUrl(`/frogs/figures/${f.src}`)} alt={f.title} loading="lazy" />
             <figcaption>
               <p className="fig-cap-title">
                 <span className="fig-num">Figure {i + 1}.</span> {f.title}
@@ -526,7 +527,7 @@ export default function FrogChorus() {
               {DIAG_PLOTS.map(p => (
                 <figure key={p.key} className="paper-appendix-plot">
                   <img
-                    src={`/frogs/plots/${r.id}/${p.key}.png`}
+                    src={mediaUrl(`/frogs/plots/${r.id}/${p.key}.png`)}
                     alt={`${r.title} ${p.title}`}
                     loading="lazy"
                   />

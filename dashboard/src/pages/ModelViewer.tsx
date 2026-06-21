@@ -9,6 +9,7 @@ import { AudioPlaybackProvider } from '../components/useAudioPlayback';
 import RecordingCard from '../components/RecordingCard';
 import DetailOverlayContent from '../components/DetailOverlay';
 import WalkthroughControls, { MobileJoystick } from '../components/WalkthroughControls';
+import { mediaUrl } from '../lib/media';
 
 const MODELS: ModelInfo[] = [
   {
@@ -69,8 +70,9 @@ function ObjModel({ model, autoRotate }: { model: ModelInfo; autoRotate: boolean
 
   // Load MTL then OBJ with materials applied
   useEffect(() => {
-    const mtlDir = model.mtlPath.substring(0, model.mtlPath.lastIndexOf('/') + 1);
-    const mtlFile = model.mtlPath.substring(model.mtlPath.lastIndexOf('/') + 1);
+    const fullMtlUrl = mediaUrl(model.mtlPath);
+    const mtlDir = fullMtlUrl.substring(0, fullMtlUrl.lastIndexOf('/') + 1);
+    const mtlFile = fullMtlUrl.substring(fullMtlUrl.lastIndexOf('/') + 1);
 
     const mtlLoader = new MTLLoader();
     mtlLoader.setPath(mtlDir);
@@ -95,7 +97,7 @@ function ObjModel({ model, autoRotate }: { model: ModelInfo; autoRotate: boolean
 
       const objLoader = new OBJLoader();
       (objLoader as any).setMaterials(materials);
-      objLoader.load(model.objPath, (obj) => {
+      objLoader.load(mediaUrl(model.objPath), (obj) => {
         // Ensure double-sided rendering on any remaining meshes
         obj.traverse((child: THREE.Object3D) => {
           if ((child as THREE.Mesh).isMesh) {
@@ -214,7 +216,7 @@ export default function ModelViewer() {
 
   // Fetch manifest on mount
   useEffect(() => {
-    fetch('/data/manifest.json')
+    fetch(mediaUrl('/data/manifest.json'))
       .then(r => r.json())
       .then((data: Manifest) => setManifest(data))
       .catch(err => console.error('Failed to load manifest:', err));
@@ -235,7 +237,7 @@ export default function ModelViewer() {
 
   const loadFileDetail = useCallback(async (file: ManifestFile) => {
     try {
-      const resp = await fetch(`/data/${file.id}.json`);
+      const resp = await fetch(mediaUrl(`/data/${file.id}.json`));
       const data: FileDetail = await resp.json();
       setSelectedFile(data);
     } catch (err) {

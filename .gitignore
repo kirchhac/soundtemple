@@ -14,3 +14,6 @@ test_overlay*.mp4
 
 # Claude Code session metadata
 .claude/
+
+# Wrangler local state
+.wrangler/

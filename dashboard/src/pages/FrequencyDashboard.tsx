@@ -5,6 +5,7 @@ import { AudioPlaybackProvider } from '../components/useAudioPlayback';
 import RecordingCard from '../components/RecordingCard';
 import DetailOverlayContent, { REFERENCE_LINES } from '../components/DetailOverlay';
 import { freqToNote } from '../components/pitchUtils';
+import { mediaUrl } from '../lib/media';
 
 const SITE_COLORS: Record<string, string> = {
   'Shah-i-Zinda Necropolis': '#a855f7',
@@ -43,7 +44,7 @@ export default function FrequencyDashboard() {
   const isMobile = useIsMobile();
 
   useEffect(() => {
-    fetch('/data/manifest.json')
+    fetch(mediaUrl('/data/manifest.json'))
       .then(r => r.json())
       .then((data: Manifest) => {
         setManifest(data);
@@ -69,7 +70,7 @@ export default function FrequencyDashboard() {
 
   const loadFileDetail = useCallback(async (file: ManifestFile) => {
     try {
-      const resp = await fetch(`/data/${file.id}.json`);
+      const resp = await fetch(mediaUrl(`/data/${file.id}.json`));
       const data: FileDetail = await resp.json();
       setSelectedFile(data);
     } catch (err) {

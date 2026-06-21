@@ -5,6 +5,7 @@ import { useAudioPlayback } from './useAudioPlayback';
 import AudioPlayer from './AudioPlayer';
 import ResonationMeter, { RESONATION_THRESHOLD } from './ResonationMeter';
 import { interpolateFreq, interpolateRms, freqToNote } from './pitchUtils';
+import { mediaUrl } from '../lib/media';
 
 function useIsMobile(breakpoint = 768) {
   const [mobile, setMobile] = useState(() => window.innerWidth <= breakpoint);
@@ -100,9 +101,8 @@ export default function DetailOverlayContent({
 
   // Resonation detection
   const resonation = React.useMemo(() => detectResonation(file), [file]);
-  const currentlyResonating = isActive && isPlaying && currentRms > RESONATION_THRESHOLD;
 
-  const audioUrl = `/audio/${file.filename}`;
+  const audioUrl = mediaUrl(`/audio/${file.filename}`);
 
   return (
     <div className="chart-overlay" onClick={onClose}>

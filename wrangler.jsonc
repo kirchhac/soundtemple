@@ -1,0 +1,17 @@
+{
+  // Cloudflare Workers + Static Assets config for the soundtemple dashboard.
+  // The dashboard is a Create-React-App project; `npm run build` writes static
+  // output to dashboard/build, which Workers serves as static assets with an
+  // SPA fallback so client routes like /frogs return index.html.
+  //
+  // Media (audio, FFT JSON, 3D models, frog research figures) is NOT served
+  // from here — it lives in R2 bucket `humbox-media` at https://media.humbox.co.
+  // See dashboard/src/lib/media.ts.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "soundtemple",
+  "compatibility_date": "2026-06-19",
+  "assets": {
+    "directory": "./dashboard/build",
+    "not_found_handling": "single-page-application"
+  }
+}

@@ -5,6 +5,7 @@ import AudioPlayer from './AudioPlayer';
 import ResonationMeter, { RESONATION_THRESHOLD } from './ResonationMeter';
 import { useAudioPlayback } from './useAudioPlayback';
 import { interpolateFreq, interpolateRms, freqToNote } from './pitchUtils';
+import { mediaUrl } from '../lib/media';
 import './RecordingCard.css';
 
 interface RecordingCardProps {
@@ -14,7 +15,7 @@ interface RecordingCardProps {
 
 export default function RecordingCard({ file, onShowDetail }: RecordingCardProps) {
   const { currentFileId, isPlaying, currentTime, duration } = useAudioPlayback();
-  const audioUrl = `/audio/${file.filename}`;
+  const audioUrl = mediaUrl(`/audio/${file.filename}`);
 
   const isActive = currentFileId === file.id;
   const isThisPlaying = isActive && isPlaying;
